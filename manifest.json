@@ -1,7 +1,8 @@
 {
   "name": "IOTVZLA Cliente",
   "short_name": "IOTVZLA",
-  "start_url": "/",
+  "start_url": "/dashboard-iotvzla/index.html",
+  "scope": "/dashboard-iotvzla/",
   "display": "standalone",
   "theme_color": "#0077cc",
   "background_color": "#071427",
