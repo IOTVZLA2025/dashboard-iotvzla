@@ -12,388 +12,392 @@
 <meta name="theme-color" content="#0b1622" />
 
 <style>
-  :root{
-    --bg:#071427;
-    --card:#0b1220;
-    --accent:#00bcd4;
-    --muted:#9fb3c8;
-    --yellow:#ffca28;
-    --orange:#ff9800;
-    --danger:#ff1744;
-    --ok:#00c853;
+  /* RESET Y VARIABLES */
+  :root {
+    --bg: #071427;
+    --card: #0b1220;
+    --accent: #00bcd4;
+    --muted: #9fb3c8;
+    --green: #00c853;
+    --yellow: #ffca28;
+    --orange: #ff9800;
+    --red: #ff1744;
+    --blue: #00bcd4;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:#071427;
-    color:#e9eef6;
-    padding:0;
-    margin:0;
-    min-height:100vh;
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
-
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: #e9eef6;
+    min-height: 100vh;
+  }
+  
   /* HEADER */
-  .header{
-    background:#0b1220;
-    padding:12px 15px;
-    border-bottom:1px solid rgba(255,255,255,0.05);
-    position:sticky;
-    top:0;
-    z-index:100;
+  .header {
+    background: var(--card);
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
   }
-  .header-content{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    max-width:900px;
-    margin:0 auto;
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 1000px;
+    margin: 0 auto;
   }
-  .header-logo{
-    width:40px;
-    height:40px;
-    border-radius:8px;
-    object-fit:contain;
-    background:rgba(255,255,255,0.05);
-    padding:3px;
-    border:1px solid rgba(0,188,212,0.2);
+  
+  .header-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: rgba(255,255,255,0.05);
+    padding: 3px;
+    border: 1px solid var(--accent);
   }
-  .header-text{
-    flex:1;
+  
+  .header-text h1 {
+    font-size: 17px;
+    color: white;
+    margin-bottom: 3px;
   }
-  .header-text h1{
-    margin:0;
-    font-size:16px;
-    color:#fff;
+  
+  .header-company {
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 600;
   }
-  .header-company{
-    font-size:13px;
-    color:#00bcd4;
-    font-weight:600;
-    margin-top:2px;
+  
+  .header-subtitle {
+    font-size: 12px;
+    color: var(--muted);
   }
-  .header-subtitle{
-    font-size:11px;
-    color:#9fb3c8;
-    margin-top:1px;
-  }
-
+  
   /* CONTENIDO PRINCIPAL */
-  .container{
-    max-width:900px;
-    margin:0 auto;
-    padding:15px;
+  .container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 0 15px;
   }
-
-  /* TARJETA PRINCIPAL */
-  .card{
-    background:#0b1220;
-    border-radius:12px;
-    padding:20px;
-    border:1px solid rgba(255,255,255,0.03);
-    box-shadow:0 8px 25px rgba(2,6,23,0.5);
+  
+  /* LAYOUT PRINCIPAL */
+  .main-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 20px;
   }
-
-  /* DISEÑO EN GRID */
-  .dashboard-grid{
-    display:grid;
-    grid-template-columns:1fr 320px;
-    gap:20px;
-  }
-
-  @media(max-width:768px){
-    .dashboard-grid{
-      grid-template-columns:1fr;
+  
+  @media (max-width: 768px) {
+    .main-content {
+      grid-template-columns: 1fr;
     }
   }
-
-  /* ========== TERMÓMETRO VERTICAL PROFESIONAL ========== */
-  .thermometer-container{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+  
+  /* TERMÓMETRO VERTICAL */
+  .thermometer-section {
+    background: var(--card);
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   }
-
-  /* Termómetro principal */
-  .thermometer{
-    width:80px;
-    height:300px;
-    background:#0a1525;
-    border-radius:40px;
-    position:relative;
-    border:3px solid rgba(255,255,255,0.08);
-    margin-bottom:15px;
-    overflow:hidden;
-    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  
+  .thermometer-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-
-  /* Fondo del termómetro */
-  .thermometer-bg{
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:linear-gradient(to bottom, 
-      #003f5c 0%,      /* Azul oscuro abajo */
-      #00c853 15%,     /* Verde en -15°C */
-      #ffca28 50%,     /* Amarillo en 42.5°C */
-      #ff9800 70%,     /* Naranja en 70°C */
-      #ff1744 100%     /* Rojo en 100°C */
+  
+  /* ESCALA VERTICAL */
+  .temperature-scale {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 25px;
+  }
+  
+  /* NÚMEROS DE LA ESCALA (vertical) */
+  .scale-numbers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 300px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-align: right;
+    min-width: 30px;
+  }
+  
+  /* TERMÓMETRO PRINCIPAL */
+  .thermometer {
+    width: 35px;
+    height: 300px;
+    background: #0a1525;
+    border-radius: 20px;
+    position: relative;
+    border: 3px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+  
+  /* FONDO DEL TERMÓMETRO */
+  .thermometer-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+      var(--blue) 0%,          /* -15°C: azul */
+      var(--green) 15%,        /* 0°C: verde */
+      var(--yellow) 50%,       /* 42.5°C: amarillo */
+      var(--orange) 70%,       /* 70°C: naranja */
+      var(--red) 100%          /* 100°C: rojo */
     );
-    opacity:0.15;
+    opacity: 0.2;
   }
-
-  /* Mercurio/indicador */
-  .mercury{
-    position:absolute;
-    bottom:0;
-    width:100%;
-    height:0%;
-    background:linear-gradient(to top, 
-      #00c853,          /* Verde base */
-      #ffca28,          /* Amarillo medio */
-      #ff9800,          /* Naranja */
-      #ff1744           /* Rojo top */
+  
+  /* MERCURIO/INDICADOR */
+  .mercury {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 25%; /* Comienza en 25.3°C */
+    background: linear-gradient(to top,
+      var(--green),
+      var(--yellow),
+      var(--orange),
+      var(--red)
     );
-    border-radius:40px;
-    transition:height 1s ease-in-out;
-    box-shadow:inset 0 0 20px rgba(255,255,255,0.2);
+    border-radius: 15px;
+    transition: height 1s ease, background 1s ease;
   }
-
-  /* Bulbo inferior */
-  .thermometer-bulb{
-    width:100px;
-    height:100px;
-    background:linear-gradient(135deg, #0a1525, #1a2535);
-    border-radius:50%;
-    margin-top:-50px;
-    position:relative;
-    border:3px solid rgba(255,255,255,0.08);
-    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  
+  /* BULBO INFERIOR */
+  .thermometer-bulb {
+    width: 65px;
+    height: 65px;
+    background: #0a1525;
+    border-radius: 50%;
+    margin-top: -30px;
+    position: relative;
+    border: 3px solid rgba(255,255,255,0.08);
   }
-
-  .bulb-inner{
-    width:70px;
-    height:70px;
-    background:linear-gradient(135deg, #ff1744, #ff9800);
-    border-radius:50%;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    opacity:0.3;
+  
+  .bulb-inner {
+    width: 45px;
+    height: 45px;
+    background: var(--red);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.4;
   }
-
-  /* Escala del termómetro */
-  .thermometer-scale{
-    position:absolute;
-    left:calc(100% + 10px);
-    top:0;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    padding:15px 0;
+  
+  /* DISPLAY DE TEMPERATURA */
+  .temperature-display {
+    text-align: center;
+    margin: 30px 0 20px 0;
   }
-
-  .scale-mark{
-    display:flex;
-    align-items:center;
-    gap:8px;
+  
+  .temperature-value {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--yellow);
+    text-shadow: 0 4px 15px rgba(255,202,40,0.3);
+    line-height: 1;
   }
-
-  .scale-line{
-    width:15px;
-    height:2px;
-    background:#fff;
-    opacity:0.7;
+  
+  .temperature-unit {
+    font-size: 30px;
+    color: rgba(255,255,255,0.7);
+    margin-left: 5px;
   }
-
-  .scale-number{
-    color:#fff;
-    font-size:12px;
-    font-weight:600;
-    min-width:25px;
+  
+  .temperature-label {
+    font-size: 15px;
+    color: var(--muted);
+    margin-top: 8px;
+    font-weight: 600;
   }
-
-  /* Temperatura digital grande */
-  .temp-display{
-    text-align:center;
-    margin:20px 0;
+  
+  /* MARCADORES EN EL TERMÓMETRO */
+  .thermometer-marks {
+    position: absolute;
+    right: -20px;
+    top: 0;
+    height: 100%;
+    width: 20px;
   }
-
-  .temp-value{
-    font-size:52px;
-    font-weight:800;
-    color:#ffca28;
-    text-shadow:0 3px 15px rgba(255,202,40,0.3);
-    line-height:1;
+  
+  .mark {
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background: white;
+    opacity: 0.6;
+    right: 0;
   }
-
-  .temp-unit{
-    font-size:28px;
-    color:rgba(255,255,255,0.7);
-    margin-left:4px;
+  
+  /* INFO DE ACTUALIZACIÓN */
+  .update-info {
+    text-align: center;
+    margin-top: 20px;
   }
-
-  .temp-label{
-    font-size:14px;
-    color:#9fb3c8;
-    margin-top:5px;
-    font-weight:600;
+  
+  .update-time {
+    font-size: 14px;
+    color: var(--muted);
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 10px;
   }
-
-  /* Info actualización */
-  .update-info{
-    text-align:center;
-    margin-top:15px;
+  
+  .update-note {
+    font-size: 13px;
+    color: var(--muted);
   }
-
-  .update-time{
-    font-size:13px;
-    color:#9fb3c8;
-    padding:8px 15px;
-    background:rgba(255,255,255,0.02);
-    border-radius:8px;
-    display:inline-block;
+  
+  /* PANEL DERECHO */
+  .status-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
-
-  .update-note{
-    font-size:12px;
-    color:#9fb3c8;
-    margin-top:8px;
+  
+  .status-card {
+    background: rgba(255,255,255,0.02);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.03);
   }
-
-  /* ========== PANEL DERECHO ========== */
-  .status-panel{
-    display:flex;
-    flex-direction:column;
-    gap:15px;
+  
+  .status-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 10px;
   }
-
-  /* Tarjetas de estado */
-  .status-card{
-    background:rgba(255,255,255,0.02);
-    border-radius:12px;
-    padding:20px;
-    border:1px solid rgba(255,255,255,0.03);
+  
+  .status-text {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 15px;
+    min-height: 20px;
   }
-
-  .status-title{
-    font-weight:700;
-    font-size:16px;
-    margin-bottom:10px;
-    color:#fff;
+  
+  /* LEDS */
+  .status-led {
+    width: 80px;
+    height: 80px;
+    border-radius: 15px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
   }
-
-  .status-value{
-    font-size:13px;
-    color:#9fb3c8;
-    margin-bottom:15px;
-    min-height:20px;
+  
+  .led-green {
+    background: linear-gradient(135deg, var(--green), #007a2b);
+    color: #021;
   }
-
-  /* LEDs grandes */
-  .status-led{
-    width:80px;
-    height:80px;
-    border-radius:15px;
-    margin:0 auto;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:800;
-    font-size:24px;
-    box-shadow:0 6px 15px rgba(0,0,0,0.5);
+  
+  .led-red {
+    background: linear-gradient(135deg, var(--red), #a1002b);
+    color: #250005;
   }
-
-  .led-green{
-    background:linear-gradient(135deg,#00c853,#007a2b);
-    color:#021;
+  
+  .led-yellow {
+    background: linear-gradient(135deg, var(--yellow), #b37a00);
+    color: #2b1a00;
   }
-
-  .led-red{
-    background:linear-gradient(135deg,#ff1744,#a1002b);
-    color:#250005;
+  
+  .led-off {
+    background: rgba(255,255,255,0.03);
+    color: var(--muted);
   }
-
-  .led-yellow{
-    background:linear-gradient(135deg,#ffca28,#b37a00);
-    color:#2b1a00;
+  
+  /* BANNERS DE ALERTA */
+  .alert-banner {
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+    display: none;
   }
-
-  .led-off{
-    background:rgba(255,255,255,0.02);
-    color:#9fb3c8;
+  
+  .alert-alarm {
+    background: linear-gradient(90deg, #311000, #6b0000);
+    color: white;
   }
-
-  /* Banner de alerta */
-  .alert-banner{
-    padding:12px;
-    border-radius:10px;
-    text-align:center;
-    font-weight:700;
-    font-size:15px;
-    display:none;
+  
+  .alert-reset {
+    background: linear-gradient(90deg, #352e0b, #7a5d00);
+    color: white;
   }
-
-  .alert-alarm{
-    background:linear-gradient(90deg,#311000,#6b0000);
-    color:#fff;
+  
+  /* INFO CONEXIÓN */
+  .connection-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,0.03);
   }
-
-  .alert-reset{
-    background:linear-gradient(90deg,#352e0b,#7a5d00);
-    color:#fff;
+  
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.03);
   }
-
-  /* Info conexión */
-  .connection-info{
-    display:flex;
-    justify-content:space-between;
-    font-size:12px;
-    color:#9fb3c8;
-    margin-top:15px;
-    padding-top:15px;
-    border-top:1px solid rgba(255,255,255,0.03);
-  }
-
-  /* Footer */
-  .footer{
-    text-align:center;
-    font-size:11px;
-    color:#9fb3c8;
-    margin-top:25px;
-    padding-top:20px;
-    border-top:1px solid rgba(255,255,255,0.03);
-  }
-
-  /* Responsive */
-  @media(max-width:768px){
-    .container{
-      padding:10px;
+  
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .container {
+      padding: 10px;
     }
-    .card{
-      padding:15px;
+    
+    .temperature-scale {
+      gap: 15px;
     }
-    .thermometer{
-      width:70px;
-      height:250px;
+    
+    .thermometer {
+      width: 30px;
+      height: 250px;
     }
-    .thermometer-bulb{
-      width:85px;
-      height:85px;
-      margin-top:-42px;
+    
+    .temperature-value {
+      font-size: 48px;
     }
-    .temp-value{
-      font-size:44px;
+    
+    .header-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 8px;
     }
-    .header-content{
-      flex-direction:column;
-      text-align:center;
-      gap:8px;
-    }
-    .header-logo{
-      width:36px;
-      height:36px;
+    
+    .header-logo {
+      width: 38px;
+      height: 38px;
     }
   }
 </style>
@@ -413,88 +417,85 @@
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="container">
-    <div class="card">
-      <div class="dashboard-grid">
-        
-        <!-- TERMÓMETRO VERTICAL -->
-        <div class="thermometer-container">
-          <div class="thermometer">
-            <div class="thermometer-bg"></div>
-            <div class="mercury" id="mercury" style="height:25%"></div>
-            <div class="thermometer-scale">
-              <div class="scale-mark">
-                <div class="scale-line"></div>
-                <div class="scale-number">100°C</div>
-              </div>
-              <div class="scale-mark">
-                <div class="scale-line"></div>
-                <div class="scale-number">75°C</div>
-              </div>
-              <div class="scale-mark">
-                <div class="scale-line"></div>
-                <div class="scale-number">50°C</div>
-              </div>
-              <div class="scale-mark">
-                <div class="scale-line"></div>
-                <div class="scale-number">25°C</div>
-              </div>
-              <div class="scale-mark">
-                <div class="scale-line"></div>
-                <div class="scale-number">0°C</div>
-              </div>
-              <div class="scale-mark">
-                <div class="scale-line"></div>
-                <div class="scale-number">-15°C</div>
+    <div class="main-content">
+      <!-- TERMÓMETRO VERTICAL -->
+      <section class="thermometer-section">
+        <div class="thermometer-wrapper">
+          <div class="temperature-scale">
+            <!-- Números de la escala -->
+            <div class="scale-numbers">
+              <div>100°C</div>
+              <div>75°C</div>
+              <div>50°C</div>
+              <div>25°C</div>
+              <div>0°C</div>
+              <div>-15°C</div>
+            </div>
+            
+            <!-- Termómetro principal -->
+            <div class="thermometer">
+              <div class="thermometer-bg"></div>
+              <div class="mercury" id="mercury"></div>
+              
+              <!-- Marcadores -->
+              <div class="thermometer-marks">
+                <div class="mark" style="top: 0%"></div>    <!-- 100°C -->
+                <div class="mark" style="top: 25%"></div>   <!-- 75°C -->
+                <div class="mark" style="top: 50%"></div>   <!-- 50°C -->
+                <div class="mark" style="top: 75%"></div>   <!-- 25°C -->
+                <div class="mark" style="top: 88.5%"></div> <!-- 0°C -->
+                <div class="mark" style="top: 100%"></div>  <!-- -15°C -->
               </div>
             </div>
           </div>
           
+          <!-- Bulbo inferior -->
           <div class="thermometer-bulb">
             <div class="bulb-inner"></div>
           </div>
-
-          <!-- TEMPERATURA DIGITAL -->
-          <div class="temp-display">
-            <div class="temp-value" id="tempValue">25.3<span class="temp-unit">°C</span></div>
-            <div class="temp-label">TEMPERATURA ACTUAL</div>
+          
+          <!-- Display de temperatura -->
+          <div class="temperature-display">
+            <div class="temperature-value" id="temperatureValue">25.3<span class="temperature-unit">°C</span></div>
+            <div class="temperature-label">TEMPERATURA ACTUAL</div>
           </div>
-
-          <!-- INFO ACTUALIZACIÓN -->
+          
+          <!-- Info de actualización -->
           <div class="update-info">
             <div id="updateTime" class="update-time">Última actualización: --</div>
             <div class="update-note">Actualización automática cada 30 segundos</div>
           </div>
         </div>
+      </section>
 
-        <!-- PANEL DERECHO -->
-        <div class="status-panel">
-          <div class="status-card">
-            <div class="status-title">Estado alarma</div>
-            <div id="alarmText" class="status-value">Normal</div>
-            <div id="ledAlarm" class="status-led led-green">✓</div>
-          </div>
-
-          <div class="status-card">
-            <div class="status-title">Reset sistema</div>
-            <div id="resetText" class="status-value">No activo</div>
-            <div id="ledReset" class="status-led led-off">-</div>
-          </div>
-
-          <div id="alarmBanner" class="alert-banner alert-alarm" style="display:none">ALARMA ACTIVADA</div>
-          <div id="resetBanner" class="alert-banner alert-reset" style="display:none">RESET RECOMENDADO</div>
-
-          <div class="connection-info">
-            <div id="lastPing">Último ping: --</div>
-            <div id="connStatus">Conexión: --</div>
-          </div>
+      <!-- PANEL DERECHO -->
+      <aside class="status-panel">
+        <div class="status-card">
+          <div class="status-title">Estado alarma</div>
+          <div id="alarmText" class="status-text">Normal</div>
+          <div id="ledAlarm" class="status-led led-green">✓</div>
         </div>
-      </div>
 
-      <!-- FOOTER -->
-      <div class="footer">
-        &copy; 2024 MILLARES BAGB SPA IOT CHILE - Sistema IoT
-      </div>
+        <div class="status-card">
+          <div class="status-title">Reset sistema</div>
+          <div id="resetText" class="status-text">No activo</div>
+          <div id="ledReset" class="status-led led-off">-</div>
+        </div>
+
+        <div id="alarmBanner" class="alert-banner alert-alarm" style="display:none">ALARMA ACTIVADA</div>
+        <div id="resetBanner" class="alert-banner alert-reset" style="display:none">RESET RECOMENDADO</div>
+
+        <div class="connection-info">
+          <div id="lastPing">Último ping: --</div>
+          <div id="connStatus">Conexión: --</div>
+        </div>
+      </aside>
     </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      &copy; 2024 MILLARES BAGB SPA IOT CHILE - Sistema IoT
+    </footer>
   </main>
 
 <script>
@@ -536,12 +537,12 @@ async function fetchThingSpeakData() {
 // =============================================
 function updateThermometer(temp) {
   const mercury = document.getElementById('mercury');
-  const tempValue = document.getElementById('tempValue');
+  const tempValue = document.getElementById('temperatureValue');
   
   // Actualizar valor digital
   tempValue.textContent = temp.toFixed(1);
   
-  // Calcular altura del mercurio (-15°C a 100°C = 0% a 100%)
+  // Calcular altura del mercurio (-15°C a 100°C)
   const minTemp = -15;
   const maxTemp = 100;
   const clampedTemp = Math.max(minTemp, Math.min(maxTemp, temp));
@@ -551,25 +552,25 @@ function updateThermometer(temp) {
   // Actualizar altura del mercurio
   mercury.style.height = `${heightPercent}%`;
   
-  // Cambiar color del mercurio según temperatura
+  // Cambiar color según temperatura
   if (temp >= 20 && temp <= 30) {
-    mercury.style.background = 'linear-gradient(to top, #00c853, #00e676)';
-    tempValue.style.color = '#00c853';
+    mercury.style.background = 'linear-gradient(to top, var(--green), #00e676)';
+    tempValue.style.color = 'var(--green)';
   } else if (temp > 30 && temp <= 50) {
-    mercury.style.background = 'linear-gradient(to top, #ffca28, #ffd54f)';
-    tempValue.style.color = '#ffca28';
+    mercury.style.background = 'linear-gradient(to top, var(--yellow), #ffd54f)';
+    tempValue.style.color = 'var(--yellow)';
   } else if (temp > 50 && temp <= CONFIG.alarmThreshold) {
-    mercury.style.background = 'linear-gradient(to top, #ff9800, #ffb74d)';
-    tempValue.style.color = '#ff9800';
+    mercury.style.background = 'linear-gradient(to top, var(--orange), #ffb74d)';
+    tempValue.style.color = 'var(--orange)';
   } else if (temp > CONFIG.alarmThreshold) {
-    mercury.style.background = 'linear-gradient(to top, #ff1744, #ff5252)';
-    tempValue.style.color = '#ff1744';
+    mercury.style.background = 'linear-gradient(to top, var(--red), #ff5252)';
+    tempValue.style.color = 'var(--red)';
   } else if (temp < 0) {
-    mercury.style.background = 'linear-gradient(to top, #00bcd4, #26c6da)';
-    tempValue.style.color = '#00bcd4';
+    mercury.style.background = 'linear-gradient(to top, var(--blue), #26c6da)';
+    tempValue.style.color = 'var(--blue)';
   } else {
-    mercury.style.background = 'linear-gradient(to top, #00c853, #ffca28)';
-    tempValue.style.color = '#ffca28';
+    mercury.style.background = 'linear-gradient(to top, var(--green), var(--yellow))';
+    tempValue.style.color = 'var(--yellow)';
   }
   
   return temp;
@@ -591,13 +592,13 @@ function updateStatus(temp) {
     alarmLed.className = 'status-led led-red';
     alarmLed.textContent = '!';
     alarmText.textContent = 'ALARMA ACTIVADA';
-    alarmText.style.color = '#ff1744';
+    alarmText.style.color = 'var(--red)';
     alarmBanner.style.display = 'block';
   } else if (temp > 30) {
     alarmLed.className = 'status-led led-yellow';
     alarmLed.textContent = '⚠';
     alarmText.textContent = 'ADVERTENCIA';
-    alarmText.style.color = '#ffca28';
+    alarmText.style.color = 'var(--yellow)';
     alarmBanner.style.display = 'none';
   } else {
     alarmLed.className = 'status-led led-green';
@@ -612,7 +613,7 @@ function updateStatus(temp) {
     resetLed.className = 'status-led led-red';
     resetLed.textContent = '!';
     resetText.textContent = 'RESET RECOMENDADO';
-    resetText.style.color = '#ff1744';
+    resetText.style.color = 'var(--red)';
     resetBanner.style.display = 'block';
   } else {
     resetLed.className = 'status-led led-off';
@@ -641,10 +642,10 @@ function updateTimestamp(success = true) {
   const statusEl = document.getElementById('connStatus');
   if (success) {
     statusEl.textContent = 'Conexión: OK';
-    statusEl.style.color = '#00c853';
+    statusEl.style.color = 'var(--green)';
   } else {
     statusEl.textContent = 'Conexión: ERROR';
-    statusEl.style.color = '#ff1744';
+    statusEl.style.color = 'var(--red)';
   }
 }
 
@@ -672,3 +673,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+
