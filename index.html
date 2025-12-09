@@ -1,16 +1,12 @@
 
-
 <!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="description" content="Sistema de monitoreo IoT Millares BAGB SPA">
-<link rel="icon" href="logo-millares.png" type="image/png">
-<link rel="apple-touch-icon" href="logo-millares.png">
+<title>MONITOREO IOTVZLA</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b1622">
-<title>MONITOREO VARIABLES MILLARES</title>
+<link rel="icon" href="icon-192.png">
 
 <style>
   :root{
@@ -22,654 +18,269 @@
     --orange:#ff9800;
     --danger:#ff1744;
     --ok:#00c853;
-    --glass: rgba(255,255,255,0.03);
   }
-  *{box-sizing:border-box}
+
   body{
     margin:0;
-    font-family:Inter,Arial,Helvetica,sans-serif;
-    background:linear-gradient(180deg,#020612 0%, #071427 100%);
-    color:#e6eef6;
-    -webkit-font-smoothing:antialiased;
-  }
-  header{
-    padding:10px 14px;
-    border-bottom:1px solid rgba(255,255,255,0.04);
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-  .logo-container {
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex:1;
-    min-width:200px;
-  }
-  .logo-img {
-    width:38px;
-    height:38px;
-    border-radius:8px;
-    object-fit:contain;
-    background:rgba(255,255,255,0.05);
-    padding:3px;
-  }
-  .header-text {
-    flex:1;
-    min-width:180px;
-  }
-  .header-text h1{
-    margin:0;
-    font-size:16px;
-    letter-spacing:0.5px;
-    color:#fff;
-  }
-  .header-text .subtitle{
-    font-size:11px;
-    color:var(--muted);
-    margin-top:2px;
-  }
-  .header-text .company-name{
-    font-size:13px;
-    color:#00bcd4;
-    font-weight:600;
-    margin-top:2px;
-  }
-  .container{
-    max-width:980px;
-    margin:12px auto;
-    padding:10px;
-  }
-  .card{
-    background:var(--card);
-    border-radius:10px;
-    padding:12px;
-    border:1px solid rgba(255,255,255,0.03);
-    box-shadow:0 8px 20px rgba(2,6,23,0.6);
-    margin-bottom:10px;
-  }
-  .main-grid{
-    display:grid;
-    grid-template-columns:1fr 320px;
-    gap:12px;
-  }
-  @media(max-width:820px){
-    .main-grid{
-      grid-template-columns:1fr;
-      gap:10px;
-    }
-    .gauge-wrapper{
-      padding:5px !important;
-    }
-    header{
-      padding:8px 12px;
-    }
-    .logo-container{
-      min-width:100%;
-      justify-content:center;
-      text-align:center;
-      margin-bottom:6px;
-    }
-    .header-text{
-      text-align:center;
-    }
+    background:#071427;
+    font-family:Arial;
+    color:white;
   }
 
-  /* GAUGE - CORREGIDO CON NÚMEROS SOBRE EL DIAL */
-  .gauge-wrapper{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:8px;
+  .container{
+    max-width:900px;
+    margin:auto;
+    padding:10px;
   }
-  
-  .gauge-container {
+
+  /* ==================== GAUGE ==================== */
+
+  .gauge-box{
+    background:var(--card);
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:15px;
+    text-align:center;
+  }
+
+  .gauge-area{
     position:relative;
-    width:300px;
-    height:160px;
-    margin:0 auto 20px auto;
+    width:330px;
+    height:180px;
+    margin:auto;
   }
-  
-  /* Fondo del gauge */
-  .gauge-background {
-    position:absolute;
-    width:300px;
-    height:150px;
-    background:#0a1525;
-    border-radius:0 0 150px 150px;
-    border:8px solid rgba(255,255,255,0.05);
+
+  .gauge-bg{
+    width:330px;
+    height:165px;
+    background:#0d1a2b;
+    border-radius:0 0 200px 200px;
+    border:5px solid rgba(255,255,255,0.1);
     border-top:none;
-    box-shadow:inset 0 10px 20px rgba(0,0,0,0.7),
-               0 5px 15px rgba(0,0,0,0.4);
-    overflow:hidden;
-    top:10px;
-  }
-  
-  /* Arco de colores */
-  .gauge-arc {
     position:absolute;
-    width:300px;
-    height:150px;
+    left:0;
+    top:15px;
+    overflow:hidden;
+  }
+
+  .gauge-arc{
+    position:absolute;
+    width:330px;
+    height:165px;
+    top:15px;
+    left:0;
+    border-radius:0 0 200px 200px;
     background:conic-gradient(
       from 180deg,
-      #00c853 0deg,      /* Verde en -15°C */
-      #ffca28 90deg,     /* Amarillo */
-      #ff9800 135deg,    /* Naranja */
-      #ff1744 180deg     /* Rojo en 100°C */
+      #00c853 0deg,
+      #ffca28 90deg,
+      #ff9800 135deg,
+      #ff1744 180deg
     );
-    border-radius:0 0 150px 150px;
-    clip-path:polygon(0% 70%, 100% 70%, 100% 100%, 0% 100%);
-    opacity:0.3;
-    top:10px;
-  }
-  
-  /* Marcaciones - CORREGIDAS */
-  .gauge-ticks {
-    position:absolute;
-    width:100%;
-    height:100%;
-    top:10px;
-  }
-  .tick {
-    position:absolute;
-    background:#fff;
-    transform-origin:50% 150px;
-    left:calc(50% - 0.5px);
-    top:0;
-  }
-  .tick.minor {
-    width:1px;
-    height:8px;
-    background:rgba(255,255,255,0.6);
-  }
-  .tick.major {
-    width:2px;
-    height:15px;
-    background:#fff;
-    box-shadow:0 0 4px rgba(255,255,255,0.5);
-  }
-  
-  /* NÚMEROS SOBRE EL DIAL - CORREGIDOS */
-  .gauge-numbers {
-    position:absolute;
-    width:100%;
-    height:100%;
-    color:#fff;
-    font-size:13px;
-    font-weight:600;
-    text-shadow:0 1px 3px rgba(0,0,0,0.8);
-    top:10px;
-  }
-  .number {
-    position:absolute;
-    text-align:center;
-    transform-origin:50% 150px;
-  }
-  
-  /* Aguja */
-  .gauge-needle {
-    --rot:0deg;
-    position:absolute;
-    width:2px;
-    height:100px;
-    background:linear-gradient(to top, #ffca28, #ff9800);
-    border-radius:1px;
-    transform-origin:50% 150px;
-    left:calc(50% - 1px);
-    top:10px;
-    transform:rotate(var(--rot));
-    z-index:20;
-    box-shadow:0 0 8px rgba(255,202,40,0.6);
-  }
-  
-  /* Centro */
-  .needle-center {
-    position:absolute;
-    width:14px;
-    height:14px;
-    background:#000;
-    border:2px solid #ffca28;
-    border-radius:50%;
-    left:calc(50% - 7px);
-    top:calc(160px - 7px);
-    z-index:21;
-    box-shadow:0 0 8px rgba(255,202,40,0.4);
-  }
-  
-  /* Display de temperatura */
-  .temp-display {
-    position:absolute;
-    top:170px;
-    left:50%;
-    transform:translateX(-50%);
-    text-align:center;
-    width:100%;
-  }
-  .temp-value {
-    font-size:42px;
-    font-weight:800;
-    color:#ffca28;
-    text-shadow:0 3px 10px rgba(255,202,40,0.3);
-    line-height:1;
-  }
-  .temp-unit {
-    font-size:22px;
-    color:rgba(255,255,255,0.7);
-    margin-left:2px;
-  }
-  
-  /* Labels fijos -15 y 100 */
-  .range-labels {
-    display:flex;
-    justify-content:space-between;
-    width:280px;
-    margin:0 auto 5px auto;
-    font-size:14px;
-    font-weight:600;
-    color:#fff;
-  }
-  
-  /* Información */
-  .gauge-info {
-    text-align:center;
-    margin-top:15px;
-    width:100%;
-  }
-  .range-info {
-    font-size:13px;
-    color:var(--muted);
-    margin:10px 0;
-    padding:6px 12px;
-    background:rgba(255,255,255,0.02);
-    border-radius:6px;
-  }
-  .update-info {
-    font-size:12px;
-    color:var(--muted);
+    opacity:0.35;
   }
 
-  /* Panel derecho */
-  .right-col{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
+  /* Aguja */
+  .needle{
+    --rot:180deg;
+    position:absolute;
+    width:3px;
+    height:110px;
+    background:#ffca28;
+    top:15px;
+    left:calc(50% - 1.5px);
+    transform-origin:50% 150px;
+    transform:rotate(var(--rot));
+    box-shadow:0 0 8px #ffca28;
   }
-  .status-card{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px;
-    border-radius:8px;
-    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.18));
-    border:1px solid rgba(255,255,255,0.02);
+
+  .needle-center{
+    width:16px;
+    height:16px;
+    background:black;
+    border:3px solid #ffca28;
+    border-radius:50%;
+    position:absolute;
+    top:160px;
+    left:calc(50% - 8px);
   }
-  .led{
-    width:65px;
-    height:65px;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:800;
-    font-size:16px;
-    color:#042;
-    box-shadow:0 6px 15px rgba(0,0,0,0.5);
-    flex-shrink:0;
+
+  /* Números y marcas */
+  .tick{
+    position:absolute;
+    width:2px;
+    height:12px;
+    background:white;
+    top:15px;
+    left:calc(50% - 1px);
+    transform-origin:50% 150px;
+    opacity:0.8;
   }
-  .led.green{
-    background:linear-gradient(180deg,var(--ok),#007a2b);
-    color:#021;
+  .tick-minor{
+    height:6px;
+    opacity:0.5;
   }
-  .led.red{
-    background:linear-gradient(180deg,var(--danger),#a1002b);
-    color:#250005;
-  }
-  .led.yellow{
-    background:linear-gradient(180deg,var(--yellow),#b37a00);
-    color:#2b1a00;
-  }
-  .status-text{
-    flex:1;
-  }
-  .status-title{
-    font-weight:700;
-    font-size:14px;
-    margin-bottom:4px;
-  }
-  .status-value{
+
+  .gauge-number{
+    position:absolute;
+    color:white;
     font-size:12px;
-    color:var(--muted);
-  }
-  .connection-info{
-    display:flex;
-    justify-content:space-between;
-    font-size:11px;
-    color:var(--muted);
-    margin-top:8px;
-    padding-top:8px;
-    border-top:1px solid rgba(255,255,255,0.03);
-  }
-  
-  .banner{
-    padding:8px;
-    border-radius:6px;
-    text-align:center;
     font-weight:700;
-    font-size:13px;
+    transform:translate(-50%, -50%);
   }
-  .banner.reset{
-    background:linear-gradient(90deg,#352e0b, #7a5d00);
-    color:#fff;
+
+  .temp-digital{
+    font-size:45px;
+    font-weight:bold;
+    margin-top:20px;
+    text-shadow:0 0 15px #ffca28;
   }
-  .banner.warn{
-    background:linear-gradient(90deg,#311000,#6b0000);
-    color:#fff;
-  }
-  
-  footer{
-    font-size:11px;
-    color:var(--muted);
-    text-align:center;
-    margin-top:15px;
-    padding-top:10px;
-    border-top:1px solid rgba(255,255,255,0.03);
-  }
+
 </style>
 </head>
+
 <body>
-<header>
-  <div class="logo-container">
-    <img src="logo-millares.png" alt="Logo Millares" class="logo-img">
-    <div class="header-text">
-      <h1>MONITOREO VARIABLES</h1>
-      <div class="company-name">MILLARES BAGB SPA IOT CHILE</div>
-      <div class="subtitle">Temperatura · Alarma · Reset</div>
-    </div>
-  </div>
-</header>
-
 <div class="container">
-  <div class="main-grid">
-    <!-- GAUGE CON NÚMEROS CORRECTOS -->
-    <div class="card">
-      <div class="gauge-wrapper">
-        <div class="range-labels">
-          <span>-15°C</span>
-          <span>100°C</span>
-        </div>
-        
-        <div class="gauge-container">
-          <div class="gauge-background"></div>
-          <div class="gauge-arc"></div>
-          <div class="gauge-ticks" id="gauge-ticks"></div>
-          <div class="gauge-numbers" id="gauge-numbers"></div>
-          <div class="gauge-needle" id="needle" style="--rot:0deg"></div>
-          <div class="needle-center"></div>
-        </div>
-        
-        <div class="temp-display">
-          <div class="temp-value" id="temp-digital">25.3<span class="temp-unit">°C</span></div>
-        </div>
-        
-        <div class="gauge-info">
-          <div id="gauge-sub" class="range-info">Última actualización: 09-12-2025 02:55:08 a. m.</div>
-          <div class="update-info">Actualización automática cada 30 segundos</div>
-        </div>
-      </div>
-    </div>
 
-    <!-- PANEL DERECHO -->
-    <div class="right-col">
-      <div class="card status-card">
-        <div class="status-text">
-          <div class="status-title">Estado alarma</div>
-          <div id="alarma-text" class="status-value">No hay alarma</div>
-        </div>
-        <div id="led-alarma" class="led green">✓</div>
-      </div>
+<div class="gauge-box">
+  <div class="gauge-area">
 
-      <div class="card status-card">
-        <div class="status-text">
-          <div class="status-title">Reset sistema</div>
-          <div id="reset-text" class="status-value">No activo</div>
-        </div>
-        <div id="led-reset" class="led" style="background:rgba(255,255,255,0.02);color:var(--muted)">-</div>
-      </div>
+    <div class="gauge-bg"></div>
+    <div class="gauge-arc"></div>
 
-      <div id="alarm-banner" class="banner warn" style="display:none">ALARMA ACTIVADA</div>
-      <div id="reset-banner" class="banner reset" style="display:none">RESET RECOMENDADO</div>
+    <!-- Contenedores para ticks y números -->
+    <div id="ticks"></div>
+    <div id="numbers"></div>
 
-      <div class="connection-info">
-        <div id="last-up">Último ping: 02:55:08 a. m.</div>
-        <div id="status-http">Conexión: OK</div>
-      </div>
-    </div>
+    <div id="needle" class="needle"></div>
+    <div class="needle-center"></div>
+
   </div>
-  
-  <footer>
-    &copy; 2024 MILLARES BAGB SPA IOT CHILE - Sistema IoT
-  </footer>
+
+  <div class="temp-digital">
+    <span id="temp-value">0.0</span>°C
+  </div>
+
+  <div id="last-update" style="margin-top:5px;color:var(--muted);font-size:13px;">
+    Última actualización: ---
+  </div>
+</div>
+<!-- PANEL DERECHO -->
+<div class="card" style="padding:15px;border-radius:10px;background:var(--card);margin-bottom:10px;">
+  <h3 style="margin:0 0 5px 0;">Estado de alarma</h3>
+  <div id="alarma-text">---</div>
 </div>
 
+<div class="card" style="padding:15px;border-radius:10px;background:var(--card);margin-bottom:10px;">
+  <h3 style="margin:0 0 5px 0;">Reset sistema</h3>
+  <div id="reset-text">---</div>
+</div>
+
+<footer style="text-align:center;margin-top:20px;color:var(--muted);font-size:12px;">
+  © 2025 IOTVZLA — Sistema IoT
+</footer>
 <script>
-  // =============================================
-  // CONFIGURACIÓN THINGSPEAK
-  // =============================================
-  const CONFIG = {
-    thingspeak: {
-      // ⚠️ REEMPLAZA CON TUS CREDENCIALES ⚠️
-      channelId: '3194050',          // Ej: '2525252'
-      readApiKey: '4L6L63LNFO0YG4BB',       // Ej: 'XK9L7P2Q4R6T8V1W3Y5Z7A'
-      field: 1,                            // Campo de temperatura
-      url: 'https://api.thingspeak.com/channels/'
-    },
-    updateInterval: 30000,
-    alarmThreshold: 50,
-    resetThreshold: 60
-  };
+// CONFIGURACIÓN
+const CONFIG = {
+  channel: "3194050",
+  apiKey: "4L6L63LNFO0YG4BB",
+  field: 1,
+  minTemp: -15,
+  maxTemp: 100,
+  interval: 30000
+};
 
-  // =============================================
-  // INICIALIZAR NÚMEROS SOBRE EL DIAL
-  // =============================================
-  function initGauge() {
-    const ticksContainer = document.getElementById('gauge-ticks');
-    const numbersContainer = document.getElementById('gauge-numbers');
-    
-    const minTemp = -15;
-    const maxTemp = 100;
-    const range = maxTemp - minTemp;
-    
-    // Ángulo: -15°C = 180° (izquierda), 100°C = 0° (derecha)
-    const startAngle = 180;   // Izquierda
-    const endAngle = 0;       // Derecha
-    const angleRange = Math.abs(endAngle - startAngle);
-    
-    // Crear marcas y números
-    for (let temp = minTemp; temp <= maxTemp; temp += 5) {
-      const percent = (temp - minTemp) / range;
-      const angle = startAngle - (percent * angleRange);
-      
-      // Marcas menores cada 5°C
-      if (temp % 5 === 0) {
-        const tick = document.createElement('div');
-        tick.className = 'tick minor';
-        tick.style.transform = `rotate(${angle}deg)`;
-        ticksContainer.appendChild(tick);
-      }
-      
-      // Números principales cada 25°C + extremos
-      if (temp % 25 === 0 || temp === minTemp || temp === maxTemp) {
-        // Marca mayor
-        const majorTick = document.createElement('div');
-        majorTick.className = 'tick major';
-        majorTick.style.transform = `rotate(${angle}deg)`;
-        ticksContainer.appendChild(majorTick);
-        
-        // Número SOBRE el dial
-        const number = document.createElement('div');
-        number.className = 'number';
-        number.textContent = temp;
-        
-        // Posición CORRECTA sobre el dial (arco de 180°)
-        const rad = angle * (Math.PI / 180);
-        const radius = 120; // Radio del arco
-        
-        // Calcular posición X,Y sobre el semicírculo
-        const x = 150 + Math.cos(rad) * radius;
-        const y = 150 - Math.sin(rad) * radius; // Restar porque Y crece hacia abajo
-        
-        // Ajustar para que quede JUSTO sobre las marcas
-        number.style.left = `${x - 10}px`;  // Centrar número
-        number.style.top = `${y - 10}px`;
-        
-        // Rotar números para que sigan la curva
-        const textAngle = angle > 90 ? angle - 180 : angle;
-        number.style.transform = `rotate(${textAngle}deg)`;
-        
-        numbersContainer.appendChild(number);
-      }
-    }
+/* ================================
+   CREAR TICKS Y NÚMEROS (CORREGIDO)
+   ================================ */
+function initGauge() {
+  const ticks = document.getElementById("ticks");
+  const numbers = document.getElementById("numbers");
+
+  const min = CONFIG.minTemp;
+  const max = CONFIG.maxTemp;
+  const total = max - min;
+
+  for (let t = min; t <= max; t += 5) {
+    const percent = (t - min) / total;
+    const angle = 180 - percent * 180;  // 180° → 0°
+
+    // Tick
+    const tick = document.createElement("div");
+    tick.className = "tick " + (t % 10 === 0 ? "" : "tick-minor");
+    tick.style.transform = `rotate(${angle}deg)`;
+    ticks.appendChild(tick);
+
+    // Número cada 5°C
+    const rad = angle * (Math.PI / 180);
+    const r = 135;  // radio perfecto
+    const x = 165 + Math.cos(rad) * r;
+    const y = 165 - Math.sin(rad) * r;
+
+    const num = document.createElement("div");
+    num.className = "gauge-number";
+    num.style.left = x + "px";
+    num.style.top = y + "px";
+    num.textContent = t;
+    numbers.appendChild(num);
   }
+}
 
-  // =============================================
-  // FUNCIONES PRINCIPALES
-  // =============================================
-  async function fetchThingSpeakData() {
-    const { channelId, readApiKey, field, url } = CONFIG.thingspeak;
-    const apiUrl = `${url}${channelId}/fields/${field}/last.json?api_key=${readApiKey}`;
-    
-    try {
-      const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error('Error en la respuesta');
-      const data = await response.json();
-      return parseFloat(data[`field${field}`]) || 0;
-    } catch (error) {
-      console.error('Error:', error);
-      return 25.3; // Valor de prueba
-    }
+/* ================================
+   AGUJAS + COLOR DIGITAL
+   ================================ */
+function updateGauge(temp) {
+  const needle = document.getElementById("needle");
+  const digital = document.getElementById("temp-value");
+
+  digital.textContent = temp.toFixed(1);
+
+  const min = CONFIG.minTemp;
+  const max = CONFIG.maxTemp;
+
+  const p = (temp - min) / (max - min);
+  const angle = 180 - p * 180;
+
+  needle.style.setProperty("--rot", angle + "deg");
+
+  digital.style.color =
+    temp < 0 ? "#00bcd4" :
+    temp <= 30 ? "#00c853" :
+    temp <= 50 ? "#ffca28" :
+    temp <= 60 ? "#ff9800" :
+    "#ff1744";
+}
+
+/* ================================
+   THINGSPEAK
+   ================================ */
+async function readTS() {
+  const url =
+    `https://api.thingspeak.com/channels/${CONFIG.channel}/fields/${CONFIG.field}/last.json?api_key=${CONFIG.apiKey}`;
+
+  try {
+    const r = await fetch(url);
+    const j = await r.json();
+    return parseFloat(j[`field${CONFIG.field}`]);
+  } catch (e) {
+    return null;
   }
+}
 
-  function updateGauge(temp) {
-    const needle = document.getElementById('needle');
-    const tempDigital = document.getElementById('temp-digital');
-    
-    tempDigital.textContent = temp.toFixed(1);
-    
-    // Calcular ángulo: -15°C = 180°, 100°C = 0°
-    const minTemp = -15;
-    const maxTemp = 100;
-    const clampedTemp = Math.max(minTemp, Math.min(maxTemp, temp));
-    const percent = (clampedTemp - minTemp) / (maxTemp - minTemp);
-    const angle = 180 - (percent * 180);
-    
-    needle.style.setProperty('--rot', `${angle}deg`);
-    
-    // Color del valor
-    if (temp >= 20 && temp <= 30) {
-      tempDigital.style.color = '#00c853';
-    } else if (temp > 30 && temp <= 50) {
-      tempDigital.style.color = '#ffca28';
-    } else if (temp > 50 && temp <= CONFIG.alarmThreshold) {
-      tempDigital.style.color = '#ff9800';
-    } else if (temp > CONFIG.alarmThreshold) {
-      tempDigital.style.color = '#ff1744';
-    } else if (temp < 0) {
-      tempDigital.style.color = '#00bcd4';
-    } else {
-      tempDigital.style.color = '#ffca28';
-    }
-    
-    return temp;
-  }
+async function updateAll() {
+  const temp = await readTS();
+  if (temp === null) return;
 
-  function updateStatus(temp) {
-    const alarmLed = document.getElementById('led-alarma');
-    const alarmText = document.getElementById('alarma-text');
-    const resetLed = document.getElementById('led-reset');
-    const resetText = document.getElementById('reset-text');
-    const alarmBanner = document.getElementById('alarm-banner');
-    const resetBanner = document.getElementById('reset-banner');
-    
-    if (temp > CONFIG.alarmThreshold) {
-      alarmLed.className = 'led red';
-      alarmLed.textContent = '!';
-      alarmText.textContent = 'ALARMA ACTIVADA';
-      alarmText.style.color = '#ff1744';
-      alarmBanner.style.display = 'block';
-    } else if (temp > 30) {
-      alarmLed.className = 'led yellow';
-      alarmLed.textContent = '⚠';
-      alarmText.textContent = 'ADVERTENCIA';
-      alarmText.style.color = '#ffca28';
-      alarmBanner.style.display = 'none';
-    } else {
-      alarmLed.className = 'led green';
-      alarmLed.textContent = '✓';
-      alarmText.textContent = 'No hay alarma';
-      alarmText.style.color = '';
-      alarmBanner.style.display = 'none';
-    }
-    
-    if (temp > CONFIG.resetThreshold) {
-      resetLed.className = 'led red';
-      resetLed.textContent = '!';
-      resetText.textContent = 'RESET RECOMENDADO';
-      resetText.style.color = '#ff1744';
-      resetBanner.style.display = 'block';
-    } else {
-      resetLed.className = 'led';
-      resetLed.style.background = 'rgba(255,255,255,0.02)';
-      resetLed.style.color = 'var(--muted)';
-      resetLed.textContent = '-';
-      resetText.textContent = 'No activo';
-      resetText.style.color = '';
-      resetBanner.style.display = 'none';
-    }
-  }
+  updateGauge(temp);
 
-  function updateTimestamp(success = true) {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('es-CL', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      second: '2-digit' 
-    });
-    const dateStr = now.toLocaleDateString('es-CL');
-    
-    document.getElementById('gauge-sub').textContent = `Última actualización: ${dateStr} ${timeStr}`;
-    document.getElementById('last-up').textContent = `Ping: ${timeStr}`;
-    
-    const statusEl = document.getElementById('status-http');
-    if (success) {
-      statusEl.textContent = 'Conexión: OK';
-      statusEl.style.color = '#00c853';
-    } else {
-      statusEl.textContent = 'Conexión: ERROR';
-      statusEl.style.color = '#ff1744';
-    }
-  }
+  const d = new Date();
+  document.getElementById("last-update").textContent =
+    "Última actualización: " + d.toLocaleString("es-CL");
+}
 
-  async function updateDashboard() {
-    try {
-      const temperature = await fetchThingSpeakData();
-      updateGauge(temperature);
-      updateStatus(temperature);
-      updateTimestamp(true);
-    } catch (error) {
-      updateTimestamp(false);
-    }
-  }
-
-  // =============================================
-  // INICIALIZACIÓN
-  // =============================================
-  document.addEventListener('DOMContentLoaded', function() {
-    initGauge();
-    updateDashboard();
-    setInterval(updateDashboard, CONFIG.updateInterval);
-  });
+initGauge();
+updateAll();
+setInterval(updateAll, CONFIG.interval);
 </script>
 </body>
 </html>
