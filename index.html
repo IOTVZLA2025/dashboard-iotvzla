@@ -33,7 +33,7 @@
     min-height:100vh;
   }
 
-  /* HEADER FIJADO */
+  /* HEADER */
   .main-header{
     padding:12px 15px;
     background:rgba(11, 18, 32, 0.95);
@@ -97,7 +97,7 @@
     box-shadow:0 8px 25px rgba(2,6,23,0.5);
   }
 
-  /* CONTENEDOR GAUGE */
+  /* CONTENEDOR GAUGE MÁS SIMPLE */
   .gauge-container{
     position:relative;
     width:280px;
@@ -119,7 +119,7 @@
     overflow:hidden;
   }
 
-  /* ARCO DE COLORES */
+  /* ARCO DE COLORES SIMPLIFICADO */
   .gauge-arc{
     position:absolute;
     width:280px;
@@ -136,43 +136,40 @@
     opacity:0.35;
   }
 
-  /* MARCAS EN FORMA DE U INVERTIDA */
-  .gauge-marks{
+  /* CONTENEDOR PARA MARCAS Y NÚMEROS */
+  .gauge-scale{
     position:absolute;
     width:100%;
     height:100%;
   }
-  .gauge-mark{
+
+  /* MARCA VERTICAL (siempre vertical, no rotada) */
+  .scale-mark{
     position:absolute;
-    width:3px;
+    width:2px;
     height:15px;
     background:#fff;
-    transform-origin:50% 140px;
-    left:calc(50% - 1.5px);
-    top:0;
-    box-shadow:0 0 4px rgba(255,255,255,0.5);
+    bottom:0;
+    left:50%;
+    margin-left:-1px;
+    transform-origin:50% 100%;
     z-index:5;
   }
 
-  /* NÚMEROS EN FORMA DE U INVERTIDA */
-  .gauge-numbers{
+  /* NÚMERO - POSICIÓN FIJA SIN ROTACIÓN */
+  .scale-number{
     position:absolute;
-    width:100%;
-    height:100%;
     color:#fff;
     font-size:14px;
     font-weight:600;
     text-shadow:0 1px 3px rgba(0,0,0,0.8);
-  }
-  .gauge-number{
-    position:absolute;
     text-align:center;
-    width:24px;
-    margin-left:-12px;
+    width:30px;
+    margin-left:-15px;
     z-index:6;
   }
 
-  /* AGUJA EN CENTRO CORRECTO */
+  /* AGUJA SIMPLE */
   .gauge-needle{
     --rot:0deg;
     position:absolute;
@@ -180,9 +177,9 @@
     height:90px;
     background:linear-gradient(to top, #ffca28, #ff9800);
     border-radius:1px;
-    transform-origin:50% 140px;
+    transform-origin:50% 100%;
     left:calc(50% - 1px);
-    top:0;
+    bottom:0;
     transform:rotate(var(--rot));
     z-index:20;
     box-shadow:0 0 6px rgba(255,202,40,0.6);
@@ -197,7 +194,7 @@
     border:2px solid #ffca28;
     border-radius:50%;
     left:calc(50% - 7px);
-    top:calc(140px - 7px);
+    bottom:calc(0px - 7px);
     z-index:21;
     box-shadow:0 0 6px rgba(255,202,40,0.4);
   }
@@ -356,13 +353,6 @@
     }
     .gauge-needle{
       height:85px;
-      transform-origin:50% 130px;
-    }
-    .needle-center{
-      top:calc(130px - 7px);
-    }
-    .gauge-mark{
-      transform-origin:50% 130px;
     }
     .temp-value{
       font-size:38px;
@@ -403,8 +393,7 @@
       <div class="gauge-container">
         <div class="gauge-background"></div>
         <div class="gauge-arc"></div>
-        <div class="gauge-marks" id="gauge-marks"></div>
-        <div class="gauge-numbers" id="gauge-numbers"></div>
+        <div class="gauge-scale" id="gauge-scale"></div>
         <div class="gauge-needle" id="needle" style="--rot:0deg"></div>
         <div class="needle-center"></div>
       </div>
@@ -466,71 +455,63 @@ const CONFIG = {
 };
 
 // =============================================
-// INICIALIZAR GAUGE - MARCAS EN FORMA DE U INVERTIDA
+// INICIALIZAR GAUGE - NUEVO ENFOQUE SIMPLE
 // =============================================
 function initGauge() {
-  const marksContainer = document.getElementById('gauge-marks');
-  const numbersContainer = document.getElementById('gauge-numbers');
+  const scaleContainer = document.getElementById('gauge-scale');
   
   const minTemp = -15;
   const maxTemp = 100;
   const range = maxTemp - minTemp;
   
-  // Ángulo CORREGIDO para U invertida
-  // -15°C = 180° (extremo izquierdo del arco)
-  // 100°C = 0° (extremo derecho del arco)
-  const startAngle = 180;  // Izquierda
-  const endAngle = 0;      // Derecha
-  const angleRange = 180;  // 180 grados de arco
+  // Valores para mostrar (marcas y números)
+  const values = [-15, 0, 25, 50, 75, 100];
   
-  // Números que queremos mostrar
-  const numbers = [-15, 0, 25, 50, 75, 100];
+  // Para un semicírculo de 180° (de -90° a 90°)
+  const startAngle = -90;  // Izquierda (-15°C)
+  const endAngle = 90;     // Derecha (100°C)
+  const angleRange = endAngle - startAngle; // 180°
   
-  // Crear una marca y número para cada valor
-  numbers.forEach(temp => {
+  // Radio del semicírculo
+  const radius = 130;
+  
+  values.forEach(temp => {
+    // Calcular porcentaje y ángulo
     const percent = (temp - minTemp) / range;
+    const angle = startAngle + (percent * angleRange);
     
-    // Calcular ángulo CORREGIDO para U invertida
-    // Los ángulos van de 180° (izquierda) a 0° (derecha)
-    const angle = startAngle - (percent * angleRange);
+    // Convertir a radianes
+    const rad = angle * (Math.PI / 180);
     
-    // Crear MARCA (raya)
+    // Calcular posición en el semicírculo
+    const centerX = 140; // Centro del gauge
+    const bottomY = 140; // Línea de base
+    
+    // Posición de la marca (en el borde del semicírculo)
+    const markX = centerX + Math.cos(rad) * radius;
+    const markY = bottomY - Math.sin(rad) * radius;
+    
+    // Crear MARCA (vertical siempre)
     const mark = document.createElement('div');
-    mark.className = 'gauge-mark';
-    mark.style.transform = `rotate(${angle}deg)`;
-    marksContainer.appendChild(mark);
+    mark.className = 'scale-mark';
+    mark.style.left = `${markX}px`;
+    mark.style.bottom = `${markY}px`;
     
-    // Crear NÚMERO
+    // Crear NÚMERO (posición fija)
     const number = document.createElement('div');
-    number.className = 'gauge-number';
+    number.className = 'scale-number';
     number.textContent = temp;
     
-    // Posicionar número ARRIBA de la marca
-    const rad = angle * (Math.PI / 180);
-    const radius = 100; // Radio para números
-    const centerX = 140; // Centro horizontal
-    const centerY = 140; // Centro vertical
+    // Posicionar número un poco más arriba de la marca
+    const numberOffset = 20;
+    const numberX = centerX + Math.cos(rad) * (radius + numberOffset);
+    const numberY = bottomY - Math.sin(rad) * (radius + numberOffset);
     
-    // Calcular posición X,Y sobre el arco
-    const x = centerX + Math.cos(rad) * radius;
-    const y = centerY - Math.sin(rad) * radius;
+    number.style.left = `${numberX}px`;
+    number.style.bottom = `${numberY}px`;
     
-    number.style.left = `${x}px`;
-    number.style.top = `${y}px`;
-    
-    // Rotar números para que sigan la curva del arco
-    let textRotation = 0;
-    if (angle > 90 && angle <= 180) {
-      // Lado izquierdo: rotar para que queden horizontales
-      textRotation = angle - 180;
-    } else if (angle >= 0 && angle <= 90) {
-      // Lado derecho: rotar para que queden horizontales
-      textRotation = angle;
-    }
-    
-    number.style.transform = `translateX(-50%) rotate(${textRotation}deg)`;
-    
-    numbersContainer.appendChild(number);
+    scaleContainer.appendChild(mark);
+    scaleContainer.appendChild(number);
   });
 }
 
@@ -553,7 +534,7 @@ async function fetchThingSpeakData() {
 }
 
 // =============================================
-// ACTUALIZAR GAUGE - CALIBRACIÓN CORRECTA
+// ACTUALIZAR GAUGE
 // =============================================
 function updateGauge(temp) {
   const needle = document.getElementById('needle');
@@ -566,9 +547,11 @@ function updateGauge(temp) {
   const clampedTemp = Math.max(minTemp, Math.min(maxTemp, temp));
   const percent = (clampedTemp - minTemp) / (maxTemp - minTemp);
   
-  // Calcular ángulo CORREGIDO para U invertida
-  // -15°C = 180° (izquierda), 100°C = 0° (derecha)
-  const angle = 180 - (percent * 180);
+  // Calcular ángulo para la aguja (-90° a 90°)
+  const startAngle = -90;
+  const endAngle = 90;
+  const angleRange = endAngle - startAngle;
+  const angle = startAngle + (percent * angleRange);
   
   needle.style.setProperty('--rot', `${angle}deg`);
   
