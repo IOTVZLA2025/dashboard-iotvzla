@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -31,7 +32,7 @@
     min-height:100vh;
   }
 
-  /* HEADER SIMPLE Y FIJO */
+  /* HEADER */
   .header{
     background:#0b1220;
     padding:12px 15px;
@@ -92,275 +93,298 @@
     box-shadow:0 8px 25px rgba(2,6,23,0.5);
   }
 
-  /* ========== GAUGE NUEVO - TOTALMENTE CORREGIDO ========== */
-  .gauge-container{
+  /* DISEÑO EN GRID */
+  .dashboard-grid{
+    display:grid;
+    grid-template-columns:1fr 320px;
+    gap:20px;
+  }
+
+  @media(max-width:768px){
+    .dashboard-grid{
+      grid-template-columns:1fr;
+    }
+  }
+
+  /* ========== TERMÓMETRO VERTICAL PROFESIONAL ========== */
+  .thermometer-container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  /* Termómetro principal */
+  .thermometer{
+    width:80px;
+    height:300px;
+    background:#0a1525;
+    border-radius:40px;
     position:relative;
-    width:280px;
-    height:140px;
-    margin:0 auto 20px auto;
-  }
-
-  /* Fondo del semicírculo */
-  .gauge-base{
-    position:absolute;
-    width:280px;
-    height:140px;
-    background:#091425;
-    border-radius:0 0 140px 140px;
-    border:6px solid rgba(255,255,255,0.05);
-    border-top:none;
+    border:3px solid rgba(255,255,255,0.08);
+    margin-bottom:15px;
     overflow:hidden;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
   }
 
-  /* Arco de colores */
-  .gauge-arc{
+  /* Fondo del termómetro */
+  .thermometer-bg{
     position:absolute;
-    width:280px;
-    height:140px;
-    background:conic-gradient(
-      from 180deg,
-      #00c853 0deg,
-      #ffca28 90deg,
-      #ff9800 135deg,
-      #ff1744 180deg
+    width:100%;
+    height:100%;
+    background:linear-gradient(to bottom, 
+      #003f5c 0%,      /* Azul oscuro abajo */
+      #00c853 15%,     /* Verde en -15°C */
+      #ffca28 50%,     /* Amarillo en 42.5°C */
+      #ff9800 70%,     /* Naranja en 70°C */
+      #ff1744 100%     /* Rojo en 100°C */
     );
-    border-radius:0 0 140px 140px;
-    clip-path:polygon(0% 70%, 100% 70%, 100% 100%, 0% 100%);
+    opacity:0.15;
+  }
+
+  /* Mercurio/indicador */
+  .mercury{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:0%;
+    background:linear-gradient(to top, 
+      #00c853,          /* Verde base */
+      #ffca28,          /* Amarillo medio */
+      #ff9800,          /* Naranja */
+      #ff1744           /* Rojo top */
+    );
+    border-radius:40px;
+    transition:height 1s ease-in-out;
+    box-shadow:inset 0 0 20px rgba(255,255,255,0.2);
+  }
+
+  /* Bulbo inferior */
+  .thermometer-bulb{
+    width:100px;
+    height:100px;
+    background:linear-gradient(135deg, #0a1525, #1a2535);
+    border-radius:50%;
+    margin-top:-50px;
+    position:relative;
+    border:3px solid rgba(255,255,255,0.08);
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  }
+
+  .bulb-inner{
+    width:70px;
+    height:70px;
+    background:linear-gradient(135deg, #ff1744, #ff9800);
+    border-radius:50%;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
     opacity:0.3;
   }
 
-  /* MARCAS - POSICIONADAS MANUALMENTE SIN ROTACIÓN */
-  .gauge-marks{
+  /* Escala del termómetro */
+  .thermometer-scale{
     position:absolute;
-    width:100%;
+    left:calc(100% + 10px);
+    top:0;
     height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:15px 0;
   }
 
-  /* Cada marca individual - posicionada con left/bottom */
-  .mark{
-    position:absolute;
-    width:2px;
-    height:12px;
+  .scale-mark{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .scale-line{
+    width:15px;
+    height:2px;
     background:#fff;
-    bottom:0;
-    transform:translateX(-50%);
-    z-index:5;
+    opacity:0.7;
   }
 
-  /* NÚMEROS - POSICIONADOS MANUALMENTE */
-  .gauge-numbers{
-    position:absolute;
-    width:100%;
-    height:100%;
+  .scale-number{
     color:#fff;
-    font-size:13px;
+    font-size:12px;
     font-weight:600;
-    text-shadow:0 1px 3px rgba(0,0,0,0.8);
+    min-width:25px;
   }
 
-  /* Cada número individual */
-  .number{
-    position:absolute;
-    text-align:center;
-    transform:translateX(-50%);
-    z-index:6;
-    white-space:nowrap;
-  }
-
-  /* AGUJA SIMPLE */
-  .needle{
-    --angle:0deg;
-    position:absolute;
-    width:2px;
-    height:90px;
-    background:linear-gradient(to top, #ffca28, #ff9800);
-    border-radius:1px;
-    transform-origin:50% 100%;
-    left:50%;
-    bottom:0;
-    transform:translateX(-50%) rotate(var(--angle));
-    z-index:20;
-    box-shadow:0 0 6px rgba(255,202,40,0.6);
-  }
-
-  /* Centro de la aguja */
-  .needle-center{
-    position:absolute;
-    width:14px;
-    height:14px;
-    background:#000;
-    border:2px solid #ffca28;
-    border-radius:50%;
-    left:50%;
-    bottom:-7px;
-    transform:translateX(-50%);
-    z-index:21;
-    box-shadow:0 0 6px rgba(255,202,40,0.4);
-  }
-
-  /* TEMPERATURA DIGITAL */
+  /* Temperatura digital grande */
   .temp-display{
     text-align:center;
-    margin:10px 0 20px 0;
-  }
-  .temp-value{
-    font-size:42px;
-    font-weight:800;
-    color:#ffca28;
-    text-shadow:0 3px 10px rgba(255,202,40,0.3);
-    line-height:1;
-  }
-  .temp-unit{
-    font-size:22px;
-    color:rgba(255,255,255,0.7);
-    margin-left:2px;
+    margin:20px 0;
   }
 
-  /* INFORMACIÓN */
-  .info{
-    text-align:center;
-    margin-bottom:20px;
+  .temp-value{
+    font-size:52px;
+    font-weight:800;
+    color:#ffca28;
+    text-shadow:0 3px 15px rgba(255,202,40,0.3);
+    line-height:1;
   }
+
+  .temp-unit{
+    font-size:28px;
+    color:rgba(255,255,255,0.7);
+    margin-left:4px;
+  }
+
+  .temp-label{
+    font-size:14px;
+    color:#9fb3c8;
+    margin-top:5px;
+    font-weight:600;
+  }
+
+  /* Info actualización */
+  .update-info{
+    text-align:center;
+    margin-top:15px;
+  }
+
   .update-time{
     font-size:13px;
     color:#9fb3c8;
-    margin:10px 0;
     padding:8px 15px;
     background:rgba(255,255,255,0.02);
     border-radius:8px;
     display:inline-block;
   }
+
   .update-note{
     font-size:12px;
     color:#9fb3c8;
+    margin-top:8px;
   }
 
-  /* PANEL DE ESTADOS */
+  /* ========== PANEL DERECHO ========== */
   .status-panel{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+    display:flex;
+    flex-direction:column;
     gap:15px;
-    margin:25px 0;
   }
 
-  /* TARJETAS DE ESTADO */
+  /* Tarjetas de estado */
   .status-card{
     background:rgba(255,255,255,0.02);
-    border-radius:10px;
-    padding:15px;
-    text-align:center;
+    border-radius:12px;
+    padding:20px;
     border:1px solid rgba(255,255,255,0.03);
   }
+
   .status-title{
     font-weight:700;
-    font-size:14px;
-    margin-bottom:8px;
+    font-size:16px;
+    margin-bottom:10px;
     color:#fff;
   }
-  .status-text{
-    font-size:12px;
+
+  .status-value{
+    font-size:13px;
     color:#9fb3c8;
-    margin-bottom:12px;
-    min-height:18px;
+    margin-bottom:15px;
+    min-height:20px;
   }
 
-  /* LEDS */
+  /* LEDs grandes */
   .status-led{
-    width:60px;
-    height:60px;
-    border-radius:10px;
+    width:80px;
+    height:80px;
+    border-radius:15px;
     margin:0 auto;
     display:flex;
     align-items:center;
     justify-content:center;
     font-weight:800;
-    font-size:16px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.4);
+    font-size:24px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.5);
   }
+
   .led-green{
-    background:linear-gradient(180deg,#00c853,#007a2b);
+    background:linear-gradient(135deg,#00c853,#007a2b);
     color:#021;
   }
+
   .led-red{
-    background:linear-gradient(180deg,#ff1744,#a1002b);
+    background:linear-gradient(135deg,#ff1744,#a1002b);
     color:#250005;
   }
+
   .led-yellow{
-    background:linear-gradient(180deg,#ffca28,#b37a00);
+    background:linear-gradient(135deg,#ffca28,#b37a00);
     color:#2b1a00;
   }
+
   .led-off{
     background:rgba(255,255,255,0.02);
     color:#9fb3c8;
   }
 
-  /* INFO CONEXIÓN */
-  .connection-info{
-    display:flex;
-    justify-content:space-between;
-    font-size:12px;
-    color:#9fb3c8;
-    margin-top:20px;
-    padding-top:15px;
-    border-top:1px solid rgba(255,255,255,0.03);
-  }
-
-  /* BANNERS */
+  /* Banner de alerta */
   .alert-banner{
-    padding:10px;
-    border-radius:8px;
+    padding:12px;
+    border-radius:10px;
     text-align:center;
     font-weight:700;
-    font-size:14px;
-    margin-top:15px;
+    font-size:15px;
     display:none;
   }
+
   .alert-alarm{
     background:linear-gradient(90deg,#311000,#6b0000);
     color:#fff;
   }
+
   .alert-reset{
     background:linear-gradient(90deg,#352e0b,#7a5d00);
     color:#fff;
   }
 
-  /* FOOTER */
-  .footer{
-    text-align:center;
-    font-size:11px;
+  /* Info conexión */
+  .connection-info{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
     color:#9fb3c8;
-    margin-top:20px;
+    margin-top:15px;
     padding-top:15px;
     border-top:1px solid rgba(255,255,255,0.03);
   }
 
-  /* RESPONSIVE */
-  @media(max-width:620px){
+  /* Footer */
+  .footer{
+    text-align:center;
+    font-size:11px;
+    color:#9fb3c8;
+    margin-top:25px;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,0.03);
+  }
+
+  /* Responsive */
+  @media(max-width:768px){
     .container{
       padding:10px;
     }
     .card{
       padding:15px;
     }
-    .gauge-container{
-      width:260px;
-      height:130px;
+    .thermometer{
+      width:70px;
+      height:250px;
     }
-    .gauge-base,
-    .gauge-arc{
-      width:260px;
-      height:130px;
-      border-radius:0 0 130px 130px;
-    }
-    .needle{
+    .thermometer-bulb{
+      width:85px;
       height:85px;
+      margin-top:-42px;
     }
     .temp-value{
-      font-size:38px;
-    }
-    .status-panel{
-      grid-template-columns:1fr;
-      gap:10px;
+      font-size:44px;
     }
     .header-content{
       flex-direction:column;
@@ -390,50 +414,80 @@
   <!-- CONTENIDO PRINCIPAL -->
   <main class="container">
     <div class="card">
-      <!-- GAUGE NUEVO -->
-      <div class="gauge-container">
-        <div class="gauge-base"></div>
-        <div class="gauge-arc"></div>
-        <div class="gauge-marks" id="gaugeMarks"></div>
-        <div class="gauge-numbers" id="gaugeNumbers"></div>
-        <div class="needle" id="needle" style="--angle:0deg"></div>
-        <div class="needle-center"></div>
-      </div>
+      <div class="dashboard-grid">
+        
+        <!-- TERMÓMETRO VERTICAL -->
+        <div class="thermometer-container">
+          <div class="thermometer">
+            <div class="thermometer-bg"></div>
+            <div class="mercury" id="mercury" style="height:25%"></div>
+            <div class="thermometer-scale">
+              <div class="scale-mark">
+                <div class="scale-line"></div>
+                <div class="scale-number">100°C</div>
+              </div>
+              <div class="scale-mark">
+                <div class="scale-line"></div>
+                <div class="scale-number">75°C</div>
+              </div>
+              <div class="scale-mark">
+                <div class="scale-line"></div>
+                <div class="scale-number">50°C</div>
+              </div>
+              <div class="scale-mark">
+                <div class="scale-line"></div>
+                <div class="scale-number">25°C</div>
+              </div>
+              <div class="scale-mark">
+                <div class="scale-line"></div>
+                <div class="scale-number">0°C</div>
+              </div>
+              <div class="scale-mark">
+                <div class="scale-line"></div>
+                <div class="scale-number">-15°C</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="thermometer-bulb">
+            <div class="bulb-inner"></div>
+          </div>
 
-      <!-- TEMPERATURA DIGITAL -->
-      <div class="temp-display">
-        <div class="temp-value" id="tempValue">25.3<span class="temp-unit">°C</span></div>
-      </div>
+          <!-- TEMPERATURA DIGITAL -->
+          <div class="temp-display">
+            <div class="temp-value" id="tempValue">25.3<span class="temp-unit">°C</span></div>
+            <div class="temp-label">TEMPERATURA ACTUAL</div>
+          </div>
 
-      <!-- INFORMACIÓN -->
-      <div class="info">
-        <div id="updateTime" class="update-time">Última actualización: --</div>
-        <div class="update-note">Actualización automática cada 30 segundos</div>
-      </div>
-
-      <!-- PANEL DE ESTADOS -->
-      <div class="status-panel">
-        <div class="status-card">
-          <div class="status-title">Estado alarma</div>
-          <div id="alarmText" class="status-text">Normal</div>
-          <div id="ledAlarm" class="status-led led-green">✓</div>
+          <!-- INFO ACTUALIZACIÓN -->
+          <div class="update-info">
+            <div id="updateTime" class="update-time">Última actualización: --</div>
+            <div class="update-note">Actualización automática cada 30 segundos</div>
+          </div>
         </div>
 
-        <div class="status-card">
-          <div class="status-title">Reset sistema</div>
-          <div id="resetText" class="status-text">No activo</div>
-          <div id="ledReset" class="status-led led-off">-</div>
+        <!-- PANEL DERECHO -->
+        <div class="status-panel">
+          <div class="status-card">
+            <div class="status-title">Estado alarma</div>
+            <div id="alarmText" class="status-value">Normal</div>
+            <div id="ledAlarm" class="status-led led-green">✓</div>
+          </div>
+
+          <div class="status-card">
+            <div class="status-title">Reset sistema</div>
+            <div id="resetText" class="status-value">No activo</div>
+            <div id="ledReset" class="status-led led-off">-</div>
+          </div>
+
+          <div id="alarmBanner" class="alert-banner alert-alarm" style="display:none">ALARMA ACTIVADA</div>
+          <div id="resetBanner" class="alert-banner alert-reset" style="display:none">RESET RECOMENDADO</div>
+
+          <div class="connection-info">
+            <div id="lastPing">Último ping: --</div>
+            <div id="connStatus">Conexión: --</div>
+          </div>
         </div>
-      </div>
-
-      <!-- BANNERS -->
-      <div id="alarmBanner" class="alert-banner alert-alarm" style="display:none">ALARMA ACTIVADA</div>
-      <div id="resetBanner" class="alert-banner alert-reset" style="display:none">RESET RECOMENDADO</div>
-
-      <!-- INFO CONEXIÓN -->
-      <div class="connection-info">
-        <div id="lastPing">Último ping: --</div>
-        <div id="connStatus">Conexión: --</div>
       </div>
 
       <!-- FOOTER -->
@@ -460,68 +514,6 @@ const CONFIG = {
 };
 
 // =============================================
-// CREAR GAUGE - POSICIÓN EXACTA DE MARCAS Y NÚMEROS
-// =============================================
-function initGauge() {
-  const marksContainer = document.getElementById('gaugeMarks');
-  const numbersContainer = document.getElementById('gaugeNumbers');
-  
-  // Valores a mostrar
-  const values = [-15, 0, 25, 50, 75, 100];
-  
-  // Coordenadas del semicírculo
-  const centerX = 140;  // Centro horizontal
-  const bottomY = 140;  // Línea de base
-  const radius = 130;   // Radio del semicírculo
-  
-  // Ángulos correspondientes (de -90° a 90°)
-  const angles = [-90, -54, -18, 18, 54, 90]; // Distribuidos uniformemente
-  
-  // Crear marcas y números
-  for (let i = 0; i < values.length; i++) {
-    const temp = values[i];
-    const angle = angles[i];
-    const rad = angle * (Math.PI / 180);
-    
-    // Posición de la MARCA (en el borde)
-    const markX = centerX + Math.cos(rad) * radius;
-    const markY = bottomY - Math.sin(rad) * radius;
-    
-    // Crear marca
-    const mark = document.createElement('div');
-    mark.className = 'mark';
-    mark.style.left = `${markX}px`;
-    mark.style.bottom = `${markY}px`;
-    marksContainer.appendChild(mark);
-    
-    // Posición del NÚMERO (un poco más arriba)
-    const numberOffset = 22;
-    const numberX = centerX + Math.cos(rad) * (radius + numberOffset);
-    const numberY = bottomY - Math.sin(rad) * (radius + numberOffset);
-    
-    // Crear número
-    const number = document.createElement('div');
-    number.className = 'number';
-    number.textContent = temp;
-    number.style.left = `${numberX}px`;
-    number.style.bottom = `${numberY}px`;
-    
-    // Rotar número para que siga la curva (opcional)
-    if (angle < -45) {
-      number.style.transform = `translateX(-50%) rotate(-30deg)`;
-    } else if (angle < 0) {
-      number.style.transform = `translateX(-50%) rotate(-15deg)`;
-    } else if (angle < 45) {
-      number.style.transform = `translateX(-50%) rotate(15deg)`;
-    } else {
-      number.style.transform = `translateX(-50%) rotate(30deg)`;
-    }
-    
-    numbersContainer.appendChild(number);
-  }
-}
-
-// =============================================
 // OBTENER DATOS DE THINGSPEAK
 // =============================================
 async function fetchThingSpeakData() {
@@ -540,37 +532,43 @@ async function fetchThingSpeakData() {
 }
 
 // =============================================
-// ACTUALIZAR GAUGE
+// ACTUALIZAR TERMÓMETRO
 // =============================================
-function updateGauge(temp) {
-  const needle = document.getElementById('needle');
+function updateThermometer(temp) {
+  const mercury = document.getElementById('mercury');
   const tempValue = document.getElementById('tempValue');
   
   // Actualizar valor digital
   tempValue.textContent = temp.toFixed(1);
   
-  // Calcular ángulo (-15°C = -90°, 100°C = 90°)
+  // Calcular altura del mercurio (-15°C a 100°C = 0% a 100%)
   const minTemp = -15;
   const maxTemp = 100;
   const clampedTemp = Math.max(minTemp, Math.min(maxTemp, temp));
   const percent = (clampedTemp - minTemp) / (maxTemp - minTemp);
-  const angle = -90 + (percent * 180);
+  const heightPercent = percent * 100;
   
-  // Actualizar aguja
-  needle.style.setProperty('--angle', `${angle}deg`);
+  // Actualizar altura del mercurio
+  mercury.style.height = `${heightPercent}%`;
   
-  // Color del valor
+  // Cambiar color del mercurio según temperatura
   if (temp >= 20 && temp <= 30) {
+    mercury.style.background = 'linear-gradient(to top, #00c853, #00e676)';
     tempValue.style.color = '#00c853';
   } else if (temp > 30 && temp <= 50) {
+    mercury.style.background = 'linear-gradient(to top, #ffca28, #ffd54f)';
     tempValue.style.color = '#ffca28';
   } else if (temp > 50 && temp <= CONFIG.alarmThreshold) {
+    mercury.style.background = 'linear-gradient(to top, #ff9800, #ffb74d)';
     tempValue.style.color = '#ff9800';
   } else if (temp > CONFIG.alarmThreshold) {
+    mercury.style.background = 'linear-gradient(to top, #ff1744, #ff5252)';
     tempValue.style.color = '#ff1744';
   } else if (temp < 0) {
+    mercury.style.background = 'linear-gradient(to top, #00bcd4, #26c6da)';
     tempValue.style.color = '#00bcd4';
   } else {
+    mercury.style.background = 'linear-gradient(to top, #00c853, #ffca28)';
     tempValue.style.color = '#ffca28';
   }
   
@@ -592,7 +590,7 @@ function updateStatus(temp) {
   if (temp > CONFIG.alarmThreshold) {
     alarmLed.className = 'status-led led-red';
     alarmLed.textContent = '!';
-    alarmText.textContent = 'ALARMA';
+    alarmText.textContent = 'ALARMA ACTIVADA';
     alarmText.style.color = '#ff1744';
     alarmBanner.style.display = 'block';
   } else if (temp > 30) {
@@ -656,7 +654,7 @@ function updateTimestamp(success = true) {
 async function updateDashboard() {
   try {
     const temperature = await fetchThingSpeakData();
-    updateGauge(temperature);
+    updateThermometer(temperature);
     updateStatus(temperature);
     updateTimestamp(true);
   } catch (error) {
@@ -668,7 +666,6 @@ async function updateDashboard() {
 // INICIALIZAR
 // =============================================
 document.addEventListener('DOMContentLoaded', function() {
-  initGauge();
   updateDashboard();
   setInterval(updateDashboard, CONFIG.updateInterval);
 });
