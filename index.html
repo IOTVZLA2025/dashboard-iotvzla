@@ -1,173 +1,299 @@
+
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Dashboard IOTVZLA - Cliente</title>
-
-  <!-- PWA manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0077cc"/>
-
-  <style>
-    :root{
-      --bg:#0f1724;
-      --card:#0b1220;
-      --accent:#00bcd4;
-      --text:#e6eef6;
-      --ok:#00c853;
-      --alert:#ff1744;
-      --muted:#9fb3c8;
-    }
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#071427 0%, #071827 100%);color:var(--text);-webkit-font-smoothing:antialiased;}
-    header{padding:18px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);}
-    h1{margin:0;font-size:20px}
-    .container{padding:16px;max-width:920px;margin:18px auto;}
-    .grid{display:grid;grid-template-columns:1fr 320px;gap:14px;}
-    @media(max-width:760px){.grid{grid-template-columns:1fr;}}
-    .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.02);}
-    .gauge{height:260px;display:flex;align-items:center;justify-content:center;flex-direction:column}
-    .temp-value{font-size:56px;font-weight:700;margin-top:12px;}
-    .meta{font-size:13px;color:var(--muted);margin-top:6px;}
-    .leds{display:flex;flex-direction:column;gap:12px;}
-    .led-row{display:flex;align-items:center;gap:12px;}
-    .led-circle{width:56px;height:56px;border-radius:999px;background:#223344;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;box-shadow:inset 0 -6px 12px rgba(0,0,0,0.4);}
-    .led-label{font-size:14px;color:var(--muted)}
-    .status-time{font-size:13px;color:var(--muted);margin-top:6px;}
-    footer{padding:10px;text-align:center;color:var(--muted);font-size:12px}
-    .small{font-size:13px;color:var(--muted)}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MONITOREO IOTVZLA</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1622" />
+<style>
+  :root{
+    --bg:#071427;
+    --card:#0b1220;
+    --accent:#00bcd4;
+    --muted:#9fb3c8;
+    --yellow:#ffca28;
+    --orange:#ff9800;
+    --danger:#ff1744;
+    --ok:#00c853;
+    --glass: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font-family:Inter,Arial,Helvetica,sans-serif; background:linear-gradient(180deg,#020612 0%, #071427 100%); color:#e6eef6; -webkit-font-smoothing:antialiased;}
+  header{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.04); display:flex;align-items:center;gap:12px}
+  header h1{margin:0;font-size:18px;letter-spacing:0.6px}
+  .container{max-width:980px;margin:18px auto;padding:12px;}
+  .card{background:var(--card);border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(2,6,23,0.6);margin-bottom:12px}
+  .main-grid{display:grid;grid-template-columns:1fr 360px;gap:14px}
+  @media(max-width:820px){.main-grid{grid-template-columns:1fr}}
+  /* Gauge area */
+  .gauge-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px}
+  .gauge-card{width:100%;display:flex;align-items:center;gap:18px;padding:8px}
+  .gauge{
+    width:340px;height:340px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background: conic-gradient(
+      #03202b 0deg,
+      #03202b 40deg,
+      #003f5c 40deg,
+      #003f5c 120deg,
+      var(--yellow) 120deg,
+      var(--yellow) 180deg,
+      var(--orange) 180deg,
+      var(--orange) 240deg,
+      var(--danger) 240deg,
+      var(--danger) 360deg
+    );
+    box-shadow: inset 0 -20px 40px rgba(0,0,0,0.6), 0 8px 30px rgba(3,8,20,0.6);
+    position:relative;
+    border: 6px solid rgba(255,255,255,0.02);
+  }
+  /* inner overlay */
+  .gauge-inner{
+    width:76%;height:76%;border-radius:50%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.35));display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;
+    box-shadow: inset 0 8px 20px rgba(0,0,0,0.6);
+  }
+  .temp-value{font-size:56px;font-weight:800;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,0.6)}
+  .temp-unit{font-size:18px;color:var(--muted);margin-top:6px}
+  .gauge-needle{
+    --rot:0deg;
+    position:absolute;width:8px;height:42%;background:linear-gradient(180deg,#fff,#ccecff);border-radius:6px;transform-origin:50% 95%;
+    transform:translateY(-8%) rotate(var(--rot));box-shadow:0 8px 18px rgba(0,0,0,0.6);
+  }
+  .gauge-center-dot{position:absolute;width:26px;height:26px;border-radius:50%;background:#031017;border:4px solid rgba(255,255,255,0.06);z-index:4}
+  .meta{font-size:13px;color:var(--muted);margin-top:8px}
+  /* right column */
+  .right-col{display:flex;flex-direction:column;gap:12px}
+  .status-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.18));border:1px solid rgba(255,255,255,0.02)}
+  .led{width:84px;height:84px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#042;box-shadow:0 8px 20px rgba(0,0,0,0.6)}
+  .led.green{background:linear-gradient(180deg,var(--ok),#007a2b);color:#021}
+  .led.red{background:linear-gradient(180deg,var(--danger),#a1002b);color:#250005}
+  .led.yellow{background:linear-gradient(180deg,var(--yellow),#b37a00);color:#2b1a00}
+  .led-label{font-size:13px;color:var(--muted)}
+  .last-up{font-size:13px;color:var(--muted)}
+  .banner{padding:10px;border-radius:8px;text-align:center;font-weight:700}
+  .banner.reset{background:linear-gradient(90deg,#352e0b, #7a5d00);color:#fff}
+  .banner.warn{background:linear-gradient(90deg,#311000,#6b0000);color:#fff}
+  footer{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+  .small{font-size:13px;color:var(--muted)}
+  .card-title{font-weight:700;margin-bottom:8px}
+  .info-row{display:flex;gap:12px;align-items:center}
+  .range-label{font-size:12px;color:var(--muted);padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02)}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Panel cliente — IOTVZLA</h1>
-    <div class="small">Temperatura • Alarma • Reset — Mostrar como app (PWA)</div>
-  </header>
+<header>
+  <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(45deg,#008fb3,#005f8a);display:flex;align-items:center;justify-content:center;font-weight:800;color:white">I</div>
+  <div>
+    <h1 style="margin:0">MONITOREO IOTVZLA</h1>
+    <div class="small">Temperatura · Alarma · Reset — Pantalla para cliente</div>
+  </div>
+</header>
 
-  <div class="container">
-    <div class="grid">
-      <div class="card">
-        <div class="gauge">
-          <div id="gauge" class="temp-value">--.- °C</div>
-          <div id="gauge-sub" class="meta">Última actualización: --:--:--</div>
-        </div>
-        <div style="margin-top:12px" class="small">Nota: toque actualizar si lo desea (la página actualiza sola cada 30s).</div>
-      </div>
-
-      <div class="card">
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div style="font-weight:700;margin-bottom:10px">Estado de Alarma</div>
-          <div class="leds" style="width:100%">
-            <div class="led-row">
-              <div id="led-alarma" class="led-circle" style="background:#223344">—</div>
-              <div style="flex:1">
-                <div class="led-label">ALERTA</div>
-                <div id="alarma-text" class="meta">No hay alarma</div>
-              </div>
+<div class="container">
+  <div class="main-grid">
+    <div class="card">
+      <div class="gauge-wrap">
+        <div class="gauge-card">
+          <div class="gauge" id="gauge">
+            <div class="gauge-needle" id="needle" style="--rot:0deg"></div>
+            <div class="gauge-inner">
+              <div class="temp-value" id="temp-digital">--.-</div>
+              <div class="temp-unit">°C</div>
+              <div class="meta" id="gauge-sub">Última actualización: --</div>
             </div>
-            <div class="led-row">
-              <div id="led-reset" class="led-circle" style="background:#223344">—</div>
-              <div style="flex:1">
-                <div class="led-label">RESET</div>
-                <div id="reset-text" class="meta">No activo</div>
-              </div>
-            </div>
+            <div class="gauge-center-dot"></div>
           </div>
-          <div id="last-up" class="status-time" style="margin-top:14px">Último ping: --</div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;align-items:center;">
+          <div class="range-label">Rangos: <b style="color:var(--yellow)">20–30°C ideal</b></div>
+          <div class="small">Actualiza cada <b>30s</b></div>
         </div>
       </div>
     </div>
 
-    <div style="margin-top:12px" class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div class="small">Canal ThingSpeak: <span id="canal-id">--</span></div>
-        <div class="small">Actualización automática cada <b id="refresh-sec">30</b>s</div>
+    <div class="right-col">
+      <div class="card status-card">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%">
+          <div style="display:flex;gap:12px;width:100%;align-items:center;justify-content:space-between">
+            <div style="display:flex;flex-direction:column">
+              <div class="card-title">Estado alarma</div>
+              <div id="alarma-text" class="small">No hay alarma</div>
+            </div>
+            <div id="led-alarma" class="led green">✓</div>
+          </div>
+
+          <div style="display:flex;gap:12px;width:100%;align-items:center;justify-content:space-between">
+            <div style="display:flex;flex-direction:column">
+              <div class="card-title">Reset</div>
+              <div id="reset-text" class="small">No activo</div>
+            </div>
+            <div id="led-reset" class="led" style="background:rgba(255,255,255,0.02);color:var(--muted)">-</div>
+          </div>
+
+          <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+            <div class="last-up" id="last-up">Último ping: --</div>
+            <div class="small" id="status-http">Conexión: --</div>
+          </div>
+        </div>
       </div>
-      <div style="margin-top:8px" class="small">Instrucciones: Para añadir en la pantalla principal del móvil: Menú → "Agregar a pantalla principal".</div>
+
+      <div id="reset-banner" class="card banner reset" style="display:none">RESET ENVIADO</div>
+      <div id="alarm-banner" class="card banner warn" style="display:none">ALARMA ACTIVADA</div>
+
+      <div class="card">
+        <div class="card-title">Información</div>
+        <div class="small">No se muestran claves ni IDs. Panel privado para cliente.</div>
+      </div>
     </div>
   </div>
 
-  <footer>Desarrollado para IOTVZLA — Panel PWA</footer>
+  <footer>© 2025 IOTVZLA — Monitorización</footer>
+</div>
 
 <script>
-/* ======= CONFIG: Pegue su CHANNEL ID y READ API KEY AQUI (en tu PC, NO compartir) ======= */
+/* ========== CONFIG - SOLO REEMPLAZAR ESTOS VALORES EN TU PC/O GITHUB (NO LOS COMPARTAS) ========== */
 const THINGSPEAK_CHANNEL_ID = "3194050";
 const THINGSPEAK_READ_API_KEY = "4L6L63LNFO0YG4BB";
-/* ===================================================================================== */
+/* ============================================================================================ */
 
-/* Ajustes */
-let refreshSeconds = 30; // cada cuantos segundos actualiza la página (30 recomendado)
-document.getElementById('refresh-sec').innerText = refreshSeconds;
+/* ajustes */
+const REFRESH_SECONDS = 30; // tiempo de actualización (segundos)
+const TEMP_MIN = -15; const TEMP_MAX = 100;
+const RANGES = [
+  {to:10, color:'#003f5c'},   // frio
+  {to:20, color:'#2a9df4'},   // fresco
+  {to:30, color:'#ffca28'},   // ideal (amarillo)
+  {to:40, color:'#ff9800'},   // alerta
+  {to:100, color:'#ff1744'}   // crítico
+];
 
-/* Función para obtener la última lectura */
-async function fetchLatest() {
-  if (!THINGSPEAK_CHANNEL_ID || !THINGSPEAK_READ_API_KEY || THINGSPEAK_CHANNEL_ID.includes("TU_")) {
-    document.getElementById('gauge').innerText = "--.- °C";
-    document.getElementById('gauge-sub').innerText = "Configura CHANNEL ID y READ API KEY en el archivo.";
+let lastCreatedAt = null;
+
+/* util: convertir fecha ISO a local */
+function fmtDate(iso){
+  try{
+    const d = new Date(iso);
+    return d.toLocaleString();
+  }catch(e){return iso}
+}
+
+/* actualiza el needle (rotación en grados) */
+function setNeedleByTemp(temp){
+  // map temp from TEMP_MIN..TEMP_MAX to -120deg .. +120deg (240deg arc)
+  const min = TEMP_MIN, max = TEMP_MAX;
+  let pct = (temp - min) / (max - min);
+  if (pct < 0) pct = 0; if (pct > 1) pct = 1;
+  const deg = -120 + (240 * pct);
+  document.getElementById('needle').style.setProperty('--rot', deg + 'deg');
+}
+
+/* calcula color del dial interior (para visibilidad) */
+function colorForTemp(temp){
+  for(let r of RANGES){
+    if (temp <= r.to) return r.color;
+  }
+  return RANGES[RANGES.length-1].color;
+}
+
+/* mostrar reset banner unos segundos */
+function showResetBanner(){
+  const b = document.getElementById('reset-banner');
+  b.style.display = 'block';
+  setTimeout(()=> b.style.display = 'none', 1500);
+}
+
+/* mostrar alarm banner persistente */
+function showAlarmBanner(on){
+  const b = document.getElementById('alarm-banner');
+  b.style.display = on ? 'block' : 'none';
+}
+
+/* actualizar UI con feed */
+function updateUI(feed){
+  const tempRaw = feed.field1 ? parseFloat(feed.field1) : null;
+  const alarma = feed.field2 ? (parseInt(feed.field2)===1) : false;
+  const reset = feed.field3 ? (parseInt(feed.field3)===1) : false;
+  const created_at = feed.created_at || new Date().toISOString();
+
+  // temperatura digital
+  const tEl = document.getElementById('temp-digital');
+  tEl.innerText = (tempRaw === null) ? '--.-' : tempRaw.toFixed(2);
+
+  // needle y color
+  if (tempRaw !== null){
+    setNeedleByTemp(tempRaw);
+    // center color glow
+    tEl.style.color = '#fff';
+    document.getElementById('gauge-sub').innerText = 'Última actualización: ' + fmtDate(created_at);
+    lastCreatedAt = created_at;
+    document.getElementById('last-up').innerText = 'Último ping: ' + fmtDate(created_at);
+  }
+
+  // alarma LED
+  const ledAl = document.getElementById('led-alarma');
+  const alarmaText = document.getElementById('alarma-text');
+  if (alarma){
+    ledAl.className = 'led red';
+    ledAl.innerText = '!';
+    alarmaText.innerText = '¡ALARMA ACTIVADA!';
+    showAlarmBanner(true);
+  } else {
+    ledAl.className = 'led green';
+    ledAl.innerText = '✓';
+    alarmaText.innerText = 'Sin alarma';
+    showAlarmBanner(false);
+  }
+
+  // reset LED & banner
+  const ledRe = document.getElementById('led-reset');
+  const resetText = document.getElementById('reset-text');
+  if (reset){
+    ledRe.className = 'led yellow';
+    ledRe.innerText = 'R';
+    resetText.innerText = 'Reset reciente';
+    showResetBanner();
+    // opcional: si deseas que reset vuelva a 0 visualmente luego, ThingSpeak debe enviar reset=0 después
+    // por seguridad aquí no forzamos cambiar nada en servidor.
+  } else {
+    ledRe.className = 'led';
+    ledRe.innerText = '-';
+    resetText.innerText = 'No activo';
+  }
+
+  // status http
+  document.getElementById('status-http').innerText = 'Conexión: OK';
+}
+
+/* traer feed más reciente desde ThingSpeak */
+async function fetchLatest(){
+  if (!THINGSPEAK_CHANNEL_ID || !THINGSPEAK_READ_API_KEY || THINGSPEAK_CHANNEL_ID.includes('TU_')){
+    document.getElementById('gauge-sub').innerText = 'Coloca CHANNEL ID y READ API KEY en el archivo.';
     return;
   }
-  try {
+  try{
     const url = `https://api.thingspeak.com/channels/${THINGSPEAK_CHANNEL_ID}/feeds.json?results=1&api_key=${THINGSPEAK_READ_API_KEY}`;
-    const res = await fetch(url, {cache: "no-cache"});
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (!data || !data.feeds || data.feeds.length === 0) {
-      throw new Error('No data');
-    }
-    const feed = data.feeds[0];
-    const temp = feed.field1 ? parseFloat(feed.field1) : null;
-    const alarma = feed.field2 ? (parseInt(feed.field2)===1) : false;
-    const reset = feed.field3 ? (parseInt(feed.field3)===1) : false;
-    const created_at = feed.created_at ? new Date(feed.created_at) : new Date();
-
-    // update UI
-    document.getElementById('gauge').innerText = (temp!==null? temp.toFixed(2): '--.-') + ' °C';
-    document.getElementById('gauge-sub').innerText = 'Última actualización: ' + created_at.toLocaleString();
-    document.getElementById('canal-id').innerText = THINGSPEAK_CHANNEL_ID;
-    document.getElementById('last-up').innerText = 'Último ping: ' + created_at.toLocaleString();
-
-    // alarma LED
-    const ledAl = document.getElementById('led-alarma');
-    const alarmaText = document.getElementById('alarma-text');
-    if (alarma) {
-      ledAl.style.background = '#ff1744';
-      ledAl.innerText = '!';
-      alarmaText.innerText = '¡ALARMA ACTIVADA!';
-    } else {
-      ledAl.style.background = '#00c853';
-      ledAl.innerText = '✓';
-      alarmaText.innerText = 'Sin alarma';
-    }
-
-    // reset LED
-    const ledRe = document.getElementById('led-reset');
-    const resetText = document.getElementById('reset-text');
-    if (reset) {
-      ledRe.style.background = '#ff9800';
-      ledRe.innerText = 'R';
-      resetText.innerText = 'Reset reciente';
-    } else {
-      ledRe.style.background = '#223344';
-      ledRe.innerText = '-';
-      resetText.innerText = 'No activo';
-    }
-
-  } catch (err) {
+    const resp = await fetch(url, {cache:'no-cache'});
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (!data || !data.feeds || data.feeds.length===0) throw new Error('No data');
+    updateUI(data.feeds[0]);
+  }catch(err){
     console.error(err);
+    document.getElementById('status-http').innerText = 'Conexión: ERROR';
     document.getElementById('gauge-sub').innerText = 'Error al leer ThingSpeak';
   }
 }
 
-/* Auto actualización */
+/* auto refresco */
 fetchLatest();
-setInterval(fetchLatest, refreshSeconds * 1000);
+setInterval(fetchLatest, REFRESH_SECONDS * 1000);
 
-/* PWA: aviso si es posible instalar */
-window.addEventListener('beforeinstallprompt', (e) => {
-  console.log('beforeinstallprompt fired');
-  // puedes mostrar un botón personalizado si quieres
-});
-
+/* registro service worker (si existe) */
+if ('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
 </script>
 </body>
 </html>
