@@ -21,13 +21,12 @@
     --orange:#ff9800;
     --danger:#ff1744;
     --ok:#00c853;
-    --glass: rgba(255,255,255,0.03);
   }
   *{box-sizing:border-box}
   body{
     margin:0;
     padding:0;
-    font-family:Inter,Arial,Helvetica,sans-serif;
+    font-family:Inter, Arial, Helvetica, sans-serif;
     background:linear-gradient(180deg,#020612 0%, #071427 100%);
     color:#e6eef6;
     -webkit-font-smoothing:antialiased;
@@ -39,229 +38,142 @@
     padding:12px 15px;
     background:rgba(11,18,32,0.95);
     border-bottom:1px solid rgba(255,255,255,0.04);
-    position:sticky;
-    top:0;
-    z-index:100;
+    position:sticky; top:0; z-index:100;
     backdrop-filter:blur(5px);
   }
   .header-content{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    max-width:900px;
-    margin:0 auto;
+    display:flex; align-items:center; gap:12px; max-width:900px; margin:0 auto;
   }
-  .logo-img{
-    width:42px;
-    height:42px;
-    border-radius:8px;
-    object-fit:contain;
-    background:rgba(255,255,255,0.05);
-    padding:4px;
-    border:1px solid rgba(0,188,212,0.2);
-  }
-  .header-text{
-    flex:1;
-  }
-  .header-text h1{
-    margin:0;
-    font-size:17px;
-    color:#fff;
-    letter-spacing:0.5px;
-  }
-  .company-name{
-    font-size:13px;
-    color:#00bcd4;
-    font-weight:600;
-    margin-top:2px;
-  }
-  .header-subtitle{
-    font-size:11px;
-    color:var(--muted);
-    margin-top:1px;
-  }
+  .logo-img{width:42px; height:42px; border-radius:8px; object-fit:contain; background:rgba(255,255,255,0.05); padding:4px; border:1px solid rgba(0,188,212,0.2);}
+  .header-text{flex:1;}
+  .header-text h1{margin:0; font-size:17px; color:#fff;}
+  .company-name{font-size:13px; color:#00bcd4; font-weight:600; margin-top:2px;}
+  .header-subtitle{font-size:11px; color:var(--muted); margin-top:1px;}
 
-  /* CONTENEDOR PRINCIPAL */
-  .main-container{
-    max-width:900px;
-    margin:0 auto;
-    padding:15px;
-  }
+  /* MAIN */
+  .main-container{max-width:900px; margin:0 auto; padding:15px;}
 
-  /* GAUGE */
+  /* CARD GAUGE */
   .gauge-section{
     background:var(--card);
     border-radius:12px;
-    padding:20px 15px;
+    padding:18px;
     margin-bottom:15px;
     border:1px solid rgba(255,255,255,0.03);
     box-shadow:0 8px 25px rgba(2,6,23,0.5);
   }
 
-  /* CONTENEDOR DEL DIAL */
+  /* Gauge wrapper (reducido 20% como pediste) */
   .gauge-container{
     position:relative;
-    width:280px;
-    height:160px;
+    width: 224px;    /* 280 * 0.8 */
+    height:128px;    /* 160 * 0.8 */
     margin:0 auto;
   }
 
   .gauge-background{
     position:absolute;
-    width:280px;
-    height:140px;
+    width:224px; height:112px;
     background:#0a1525;
-    border-radius:0 0 140px 140px;
-    border:6px solid rgba(255,255,255,0.05);
+    border-radius:0 0 112px 112px;
+    border:5px solid rgba(255,255,255,0.05);
     border-top:none;
-    box-shadow:inset 0 8px 15px rgba(0,0,0,0.6),
-               0 4px 12px rgba(0,0,0,0.3);
+    box-shadow:inset 0 8px 15px rgba(0,0,0,0.6), 0 4px 12px rgba(0,0,0,0.3);
     overflow:hidden;
+    top:8px;
+    left:0;
   }
 
   .gauge-arc{
     position:absolute;
-    width:280px;
-    height:150px;
-    background:conic-gradient(
-      from 180deg,
-      #00c853 0deg,
-      #ffca28 90deg,
-      #ff9800 135deg,
-      #ff1744 180deg
-    );
-    border-radius:0 0 150px 150px;
+    width:224px; height:120px;
+    background:conic-gradient(from 180deg, #00c853 0deg, #ffca28 90deg, #ff9800 135deg, #ff1744 180deg);
+    border-radius:0 0 120px 120px;
     clip-path:polygon(0% 70%, 100% 70%, 100% 100%, 0% 100%);
     opacity:0.35;
+    top:8px;
+    left:0;
   }
 
-  /* MARCAS */
-  .gauge-marks{
+  /* MARKS & NUMBERS container sized to gauge */
+  .gauge-marks{position:absolute; width:224px; height:120px; top:8px; left:0; pointer-events:none;}
+  .gauge-numbers{position:absolute; width:224px; height:120px; top:8px; left:0; pointer-events:none;}
+
+  /* Generic mark */
+  .gauge-mark{
     position:absolute;
-    width:100%;
-    height:150px;
-    top:10px;
-  }
-  .mark{
-    position:absolute;
-    width:2px;
-    height:15px;
-    background:white;
-    transform-origin:50% 140px;
-    left:calc(50% - 1px);
-    top:0;
+    width:2px; height:12px;
+    background:rgba(255,255,255,0.9);
+    border-radius:1px;
+    transform-origin:50% 120px;
+    z-index:12;
+    box-shadow:0 1px 3px rgba(0,0,0,0.6);
   }
 
-  /* NUMEROS SOBRE U INVERTIDA */
-  .gauge-numbers{
-    position:absolute;
-    width:100%;
-    height:150px;
-    top:10px;
-  }
+  /* minor tick (for 5°C steps) */
+  .gauge-minor{width:1px;height:8px;background:rgba(255,255,255,0.45);}
+
   .gauge-number{
     position:absolute;
-    width:28px;
-    text-align:center;
-    font-size:13px;
-    font-weight:700;
-    text-shadow:0 1px 3px black;
-    transform-origin:center;
+    font-size:12px; font-weight:700; color:#fff;
+    text-shadow:0 1px 2px rgba(0,0,0,0.6);
+    transform:translate(-50%,-50%);
+    z-index:14;
   }
 
-  /* AGUJA */
+  /* Needle */
   .gauge-needle{
     --rot:0deg;
     position:absolute;
-    width:3px;
-    height:100px;
+    width:3px; height:80px; /* scaled */
     background:linear-gradient(to top,#ffca28,#ff9800);
-    left:calc(50% - 1.5px);
-    top:10px;
-    transform-origin:50% 140px;
+    left:50%; top:8px;
+    transform-origin:50% 120px;
     transform:rotate(var(--rot));
     z-index:20;
     border-radius:2px;
+    box-shadow:0 2px 6px rgba(255,170,30,0.25);
   }
-
   .needle-center{
-    position:absolute;
-    width:16px;
-    height:16px;
-    background:black;
-    border:3px solid #ffca28;
-    border-radius:50%;
-    left:calc(50% - 8px);
-    top:calc(150px - 8px);
-    z-index:25;
+    position:absolute; width:14px; height:14px;
+    background:black; border:3px solid #ffca28; border-radius:50%;
+    left:50%; top:112px; transform:translate(-50%,-50%); z-index:22;
+    box-shadow:0 2px 6px rgba(0,0,0,0.6);
   }
 
-  /* TEMPERATURA DIGITAL */
-  .temp-display{
-    text-align:center;
-    margin-top:10px;
-  }
-  .temp-value{
-    font-size:42px;
-    font-weight:800;
-    color:#ffca28;
-    margin-bottom:5px;
-  }
-  .temp-unit{
-    font-size:22px;
-    opacity:0.8;
-  }
+  /* Digital temp */
+  .temp-display{ text-align:center; margin-top:12px; }
+  .temp-value{ font-size:34px; font-weight:800; color:#ffca28; line-height:1; }
+  .temp-unit{ font-size:18px; opacity:0.85; }
 
-  /* ESTADOS (ALARMA / RESET) */
-  .status-panel{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-    margin-top:20px;
-  }
-  .status-card{
-    background:rgba(255,255,255,0.03);
-    border-radius:10px;
-    padding:12px;
-    text-align:center;
-  }
-  .status-title{
-    font-size:14px;
-    font-weight:700;
-    margin-bottom:8px;
-  }
-  .status-value{
-    font-size:12px;
-    opacity:0.8;
-  }
+  /* Status */
+  .status-panel{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+  .status-card{ background:rgba(255,255,255,0.03); border-radius:10px; padding:12px; text-align:center; }
+  .status-title{ font-size:14px; font-weight:700; margin-bottom:8px; color:#fff; }
+  .status-value{ font-size:12px; opacity:0.85; margin-bottom:8px; }
+  .status-led{ width:54px; height:54px; margin:0 auto; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; }
+  .led-green{ background:linear-gradient(180deg,var(--ok),#007a2b); color:#021; }
+  .led-yellow{ background:linear-gradient(180deg,var(--yellow),#b37a00); color:#2b1a00; }
+  .led-red{ background:linear-gradient(180deg,var(--danger),#a1002b); color:#250005; }
+  .led-off{ background:rgba(255,255,255,0.02); color:var(--muted); }
 
-  .status-led{
-    width:60px;
-    height:60px;
-    margin:0 auto;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:18px;
-    font-weight:800;
-  }
-  .led-green{background:#00c853;}
-  .led-yellow{background:#ffca28;}
-  .led-red{background:#ff1744;}
-  .led-off{background:#333;}
+  .connection-info{ text-align:center; margin-top:14px; font-size:12px; color:var(--muted); }
 
-  .connection-info{
-    text-align:center;
-    margin-top:20px;
-    font-size:11px;
-    opacity:0.75;
+  /* Footer */
+  .main-footer{ text-align:center; font-size:11px; color:var(--muted); margin-top:14px; }
+
+  /* Responsive */
+  @media(max-width:620px){
+    .header-content{ flex-direction:column; text-align:center; gap:8px; }
+    .gauge-container{ width:88%; height:auto; max-width:320px; }
+    .gauge-background, .gauge-arc, .gauge-marks, .gauge-numbers { left:0; right:0; margin:0 auto; }
+    .temp-value{ font-size:30px; }
+    .status-panel{ grid-template-columns:1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="main-header">
   <div class="header-content">
     <img src="logo-millares.png" class="logo-img" alt="Logo">
@@ -273,40 +185,29 @@
   </div>
 </header>
 
-<!-- CONTENIDO PRINCIPAL -->
 <main class="main-container">
-
-  <!-- GAUGE COMPLETO -->
   <section class="gauge-section">
 
-    <div class="gauge-container">
+    <div class="gauge-container" id="gauge-root">
       <div class="gauge-background"></div>
       <div class="gauge-arc"></div>
 
-      <!-- Marcas corregidas -->
+      <!-- containers where JS will draw marks & numbers -->
       <div id="gauge-marks" class="gauge-marks"></div>
-
-      <!-- Números corregidos -->
       <div id="gauge-numbers" class="gauge-numbers"></div>
 
-      <!-- Aguja corregida -->
+      <!-- single synchronized needle -->
       <div id="needle" class="gauge-needle" style="--rot:0deg"></div>
       <div class="needle-center"></div>
     </div>
 
-    <!-- TEMP DIGITAL -->
     <div class="temp-display">
-      <div class="temp-value" id="temp-digital">
-        0.0<span class="temp-unit">°C</span>
-      </div>
+      <div id="temp-digital" class="temp-value">0.0<span class="temp-unit">°C</span></div>
     </div>
 
-    <!-- INFO -->
     <div class="connection-info" id="update-time">Última actualización: --</div>
 
-    <!-- PANEL ESTADOS -->
     <div class="status-panel">
-
       <div class="status-card">
         <div class="status-title">Estado alarma</div>
         <div id="alarma-text" class="status-value">Normal</div>
@@ -318,21 +219,19 @@
         <div id="reset-text" class="status-value">No activo</div>
         <div id="led-reset" class="status-led led-off">-</div>
       </div>
-
     </div>
+
+    <div class="connection-info" id="ping-status">Ping: -- &nbsp; · &nbsp; Conexión: --</div>
 
   </section>
 
   <footer class="main-footer">
     &copy; 2024 MILLARES BAGB SPA IOT CHILE - Sistema IoT
   </footer>
-
 </main>
 
 <script>
-// ============================================================
-// CONFIGURACIÓN THINGSPEAK
-// ============================================================
+/* ================= CONFIG ================= */
 const CONFIG = {
   thingspeak: {
     channelId: "3194050",
@@ -340,158 +239,156 @@ const CONFIG = {
     field: 1,
     url: "https://api.thingspeak.com/channels/"
   },
-  updateInterval: 30000,
-  alarmThreshold: 50,
+  updateInterval: 30000,   // 30s
+  alarmThreshold: 50,      // alarma rojo > 50
+  warningThreshold: 30,    // ambar > 30
   resetThreshold: 60,
   minTemp: -15,
   maxTemp: 100
 };
 
-// ============================================================
-// INICIALIZAR GAUGE — MARCAS PERFECTAMENTE ALINEADAS
-// ============================================================
+/* ================ UTILS ================ */
+function nowStr() {
+  const d = new Date();
+  return d.toLocaleDateString('es-CL') + ' ' + d.toLocaleTimeString('es-CL');
+}
+
+/* ================ DRAW GAUGE ================ */
 function initGauge() {
-  const marks = document.getElementById("gauge-marks");
-  const nums = document.getElementById("gauge-numbers");
+  const marks = document.getElementById('gauge-marks');
+  const nums = document.getElementById('gauge-numbers');
+
+  marks.innerHTML = '';
+  nums.innerHTML = '';
+
+  // gauge geometry scaled to CSS sizes
+  const gw = document.querySelector('.gauge-container').offsetWidth; // ~224
+  const gh = document.querySelector('.gauge-container').offsetHeight; // ~128
+  // center relative to container
+  const cx = gw / 2;
+  const cy = gh; // base of semicircle
+  const radiusMarks = Math.min(gw, gh*2) * 0.55; // where ticks sit
+  const radiusNums = radiusMarks - 28;            // numbers inside ticks
 
   const min = CONFIG.minTemp;
   const max = CONFIG.maxTemp;
   const range = max - min;
 
-  const radiusMarks = 125;
-  const radiusNums = 100;
+  // draw minor ticks every 5°C and major every 25°C
+  for (let t = min; t <= max; t += 5) {
+    const pct = (t - min) / range;
+    const angle = 180 - pct * 180; // left 180 -> right 0
+    const rad = angle * Math.PI / 180;
+    const mx = cx + Math.cos(rad) * radiusMarks;
+    const my = cy - Math.sin(rad) * radiusMarks;
 
-  const cx = 140;
-  const cy = 140;
-
-  // NÚMEROS EXACTOS QUE QUIERES
-  const numbers = [-15, 0, 25, 50, 75, 100];
-
-  numbers.forEach(temp => {
-    const percent = (temp - min) / range;
-    const angle = 180 - percent * 180; // 180° izq → 0° der
-    const rad = (angle * Math.PI) / 180;
-
-    // ------ MARCA (RAYA) ------
-    const x1 = cx + Math.cos(rad) * radiusMarks;
-    const y1 = cy - Math.sin(rad) * radiusMarks;
-
-    const mark = document.createElement("div");
-    mark.className = "gauge-mark";
-    mark.style.left = `${x1}px`;
-    mark.style.top = `${y1}px`;
-    mark.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+    const mark = document.createElement('div');
+    mark.className = 'gauge-mark' + (t % 25 === 0 ? '' : ' gauge-minor');
+    mark.style.left = `${mx}px`;
+    mark.style.top  = `${my}px`;
+    mark.style.transform = `translate(-50%,-50%) rotate(${angle}deg)`;
     marks.appendChild(mark);
 
-    // ------ NÚMERO ------
-    const x2 = cx + Math.cos(rad) * radiusNums;
-    const y2 = cy - Math.sin(rad) * radiusNums;
-
-    const num = document.createElement("div");
-    num.className = "gauge-number";
-    num.textContent = temp;
-    num.style.left = `${x2}px`;
-    num.style.top = `${y2}px`;
-    num.style.transform = "translate(-50%, -50%)";
-    nums.appendChild(num);
-  });
+    // major number every 25 (and extremes)
+    if (t % 25 === 0 || t === min || t === max) {
+      const nx = cx + Math.cos(rad) * radiusNums;
+      const ny = cy - Math.sin(rad) * radiusNums;
+      const num = document.createElement('div');
+      num.className = 'gauge-number';
+      num.textContent = t;
+      num.style.left = `${nx}px`;
+      num.style.top  = `${ny}px`;
+      nums.appendChild(num);
+    }
+  }
 }
 
-// ============================================================
-// OBTENER DATOS THINGSPEAK
-// ============================================================
+/* ================ THINGSPEAK FETCH ================ */
 async function fetchThingSpeakData() {
   const { channelId, readApiKey, field, url } = CONFIG.thingspeak;
   const apiUrl = `${url}${channelId}/fields/${field}/last.json?api_key=${readApiKey}`;
-
   try {
-    const r = await fetch(apiUrl);
-    if (!r.ok) throw new Error("HTTP error");
+    const r = await fetch(apiUrl, {cache: "no-store"});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     const j = await r.json();
     return parseFloat(j[`field${field}`]);
-  } catch {
+  } catch (e) {
+    console.warn('ThingSpeak fetch error:', e);
     return null;
   }
 }
 
-// ============================================================
-// ACTUALIZAR GAUGE — AGUJA PERFECTAMENTE CALIBRADA
-// ============================================================
+/* ================ UPDATE GAUGE ================ */
 function updateGauge(temp) {
-  const needle = document.getElementById("needle");
-  const digital = document.getElementById("temp-digital");
+  const needle = document.getElementById('needle');
+  const digital = document.getElementById('temp-digital');
 
-  if (temp == null) return;
+  if (temp === null || isNaN(temp)) {
+    digital.innerHTML = '--.<span class="temp-unit">°C</span>';
+    return;
+  }
 
-  digital.innerHTML = temp.toFixed(1) + "<span class='temp-unit'>°C</span>";
+  // display
+  digital.innerHTML = temp.toFixed(1) + '<span class="temp-unit">°C</span>';
 
-  const min = CONFIG.minTemp;
-  const max = CONFIG.maxTemp;
-
+  // clamp & compute angle
+  const min = CONFIG.minTemp, max = CONFIG.maxTemp;
   const clamped = Math.max(min, Math.min(max, temp));
-  const percent = (clamped - min) / (max - min);
+  const pct = (clamped - min) / (max - min);
+  const angle = 180 - pct * 180; // 180 left -> 0 right
 
-  const angle = 180 - percent * 180; // ← AGUJA AL 100% CORRECTA
+  needle.style.setProperty('--rot', angle + 'deg');
 
-  needle.style.setProperty("--rot", `${angle}deg`);
+  // update ping status
+  document.getElementById('ping-status').textContent = `Ping: ${new Date().toLocaleTimeString('es-CL')} · Conexión: OK`;
 }
 
-// ============================================================
-// ESTADOS (ALARMA + RESET)
-// ============================================================
+/* ================ UPDATE STATUS (LEDS) ================ */
 function updateStatus(temp) {
-  const alarmLed = document.getElementById("led-alarma");
-  const alarmText = document.getElementById("alarma-text");
-  const resetLed = document.getElementById("led-reset");
-  const resetText = document.getElementById("reset-text");
+  const alarmLed = document.getElementById('led-alarma');
+  const alarmText = document.getElementById('alarma-text');
+  const resetLed = document.getElementById('led-reset');
+  const resetText = document.getElementById('reset-text');
 
-  // ---- ALARMA ----
+  if (temp === null || isNaN(temp)) {
+    alarmLed.className = 'status-led led-off'; alarmLed.textContent = '-';
+    alarmText.textContent = 'Sin datos';
+    resetLed.className = 'status-led led-off'; resetText.textContent = 'No activo';
+    return;
+  }
+
   if (temp > CONFIG.alarmThreshold) {
-    alarmLed.className = "status-led led-red";
-    alarmLed.textContent = "!";
-    alarmText.textContent = "ALARMA";
-    alarmText.style.color = "#ff1744";
-  } else if (temp > 30) {
-    alarmLed.className = "status-led led-yellow";
-    alarmLed.textContent = "⚠";
-    alarmText.textContent = "ADVERTENCIA";
-    alarmText.style.color = "#ffca28";
+    alarmLed.className = 'status-led led-red'; alarmLed.textContent = '!';
+    alarmText.textContent = 'ALARMA';
+    alarmText.style.color = '#ff1744';
+  } else if (temp > CONFIG.warningThreshold) {
+    alarmLed.className = 'status-led led-yellow'; alarmLed.textContent = '⚠';
+    alarmText.textContent = 'ADVERTENCIA';
+    alarmText.style.color = '#ffca28';
   } else {
-    alarmLed.className = "status-led led-green";
-    alarmLed.textContent = "✓";
-    alarmText.textContent = "Normal";
-    alarmText.style.color = "";
+    alarmLed.className = 'status-led led-green'; alarmLed.textContent = '✓';
+    alarmText.textContent = 'Normal';
+    alarmText.style.color = '';
   }
 
-  // ---- RESET ----
+  // reset indicator logic (you can change thresholds)
   if (temp > CONFIG.resetThreshold) {
-    resetLed.className = "status-led led-red";
-    resetLed.textContent = "!";
-    resetText.textContent = "RESET RECOMENDADO";
-    resetText.style.color = "#ff1744";
+    resetLed.className = 'status-led led-red'; resetLed.textContent = '!';
+    resetText.textContent = 'RESET RECOMENDADO';
+    resetText.style.color = '#ff1744';
   } else {
-    resetLed.className = "status-led led-off";
-    resetLed.textContent = "-";
-    resetText.textContent = "No activo";
-    resetText.style.color = "";
+    resetLed.className = 'status-led led-off'; resetLed.textContent = '-';
+    resetText.textContent = 'No activo';
+    resetText.style.color = '';
   }
 }
 
-// ============================================================
-// TIMESTAMP
-// ============================================================
+/* ================ TIMESTAMP ================ */
 function updateTimestamp(ok = true) {
-  const now = new Date();
-  document.getElementById("update-time").textContent =
-    "Última actualización: " +
-    now.toLocaleDateString("es-CL") +
-    " " +
-    now.toLocaleTimeString("es-CL");
+  document.getElementById('update-time').textContent = 'Última actualización: ' + nowStr();
 }
 
-// ============================================================
-// FUNCIÓN PRINCIPAL
-// ============================================================
+/* ================ MAIN UPDATE ================ */
 async function updateDashboard() {
   const t = await fetchThingSpeakData();
   updateGauge(t);
@@ -499,17 +396,24 @@ async function updateDashboard() {
   updateTimestamp();
 }
 
-// ============================================================
-// INICIALIZAR TODO
-// ============================================================
-document.addEventListener("DOMContentLoaded", () => {
+/* ================ INIT ================ */
+document.addEventListener('DOMContentLoaded', () => {
   initGauge();
   updateDashboard();
   setInterval(updateDashboard, CONFIG.updateInterval);
+
+  // re-init gauge on resize so positions adapt on mobile
+  window.addEventListener('resize', () => {
+    // small debounce
+    clearTimeout(window._gaugeResizeTimer);
+    window._gaugeResizeTimer = setTimeout(() => {
+      initGauge();
+      // refresh display values after reinit
+      updateDashboard();
+    }, 250);
+  });
 });
 </script>
+
 </body>
 </html>
-
-  
-
