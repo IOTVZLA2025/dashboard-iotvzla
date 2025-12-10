@@ -1,5 +1,4 @@
 
-
 <!doctype html>
 <html lang="es">
 <head>
@@ -71,7 +70,7 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    padding:18px;
+    padding:8px; /* reducido para subir el dial */
   }
   .gauge-card{
     width:100%;
@@ -90,21 +89,10 @@
     justify-content:center;
     background:
       radial-gradient(circle at center, #0b1220 72%, transparent 72%),
-      conic-gradient(
-        #03202b 0deg,
-        #03202b 40deg,
-        #003f5c 40deg,
-        #003f5c 120deg,
-        var(--yellow) 120deg,
-        var(--yellow) 180deg,
-        var(--orange) 180deg,
-        var(--orange) 240deg,
-        var(--danger) 240deg,
-        var(--danger) 360deg
-      );
+      conic-gradient(var(--yellow) 0deg, var(--yellow) 360deg); /* solo amarillo uniforme */
     box-shadow: inset 0 -20px 40px rgba(0,0,0,0.6), 0 8px 30px rgba(3,8,20,0.6);
     position:relative;
-    border: 24px solid rgba(255,255,255,0.12); /* 3 veces más grueso que antes */
+    border: 12px solid rgba(255,255,255,0.12); /* mitad del ancho anterior (24px -> 12px) */
   }
   .gauge-inner{
     width:70%;
@@ -385,3 +373,4 @@ if ('serviceWorker' in navigator){
 </script>
 </body>
 </html>
+
