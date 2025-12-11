@@ -106,7 +106,7 @@
     transition: width 1s ease;
   }
 
-  /* NUMEROS */
+  /* NUMEROS SIN "°C" */
   .thermo-scale{
     width:100%;
     display:flex;
@@ -150,6 +150,16 @@
   .led-yellow{background:var(--yellow);color:#2b1a00}
   .led-red{background:var(--red);color:#250005}
   .led-off{background:rgba(255,255,255,0.05);color:var(--muted)}
+
+  /* FOOTER COPYRIGHT */
+  .footer-copy{
+    text-align:center;
+    font-size:14px;
+    color:var(--blue);
+    margin-top:25px;
+    font-weight:700;
+  }
+
 </style>
 </head>
 
@@ -178,20 +188,9 @@
           <div id="mercury" class="thermo-mercury"></div>
         </div>
 
-        <!-- Numeración -->
+        <!-- Numeración (sin °C) -->
         <div class="thermo-scale">
-          <span>-15°C</span>
-          <span>0°C</span>
-          <span>10°C</span>
-          <span>20°C</span>
-          <span>30°C</span>
-          <span>40°C</span>
-          <span>50°C</span>
-          <span>60°C</span>
-          <span>70°C</span>
-          <span>80°C</span>
-          <span>90°C</span>
-          <span>100°C</span>
+          <span>-15</span><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span><span>100</span>
         </div>
 
         <!-- Display -->
@@ -202,14 +201,14 @@
       </div>
     </div>
 
-    <!-- ALARMA -->
+    <!-- ALARMA A LA IZQUIERDA -->
     <div class="side-card">
       <div class="side-title">Estado alarma</div>
       <div id="alarmText" class="side-text">Normal</div>
       <div id="ledAlarm" class="led led-green">✓</div>
     </div>
 
-    <!-- RESET -->
+    <!-- RESET A LA DERECHA -->
     <div class="side-card">
       <div class="side-title">Reset</div>
       <div id="resetText" class="side-text">No activo</div>
@@ -217,6 +216,12 @@
     </div>
 
   </div>
+
+  <!-- COPYRIGHT PROFESIONAL ABAJO -->
+  <div class="footer-copy">
+    &copy; MILLARES INGENIERIA SPA CHILE
+  </div>
+
 </div>
 
 <script>
@@ -247,12 +252,12 @@ function updateStatus(t){
   const alarmLed=document.getElementById("ledAlarm");
   const alarmText=document.getElementById("alarmText");
   const resetLed=document.getElementById("ledReset");
-  const resetText=document.getElementById("resetText");
+  const resetText=document.getElementById("resetText"); final to=container.execption.Message truncated;"><?><??>
 
   if(t>CONFIG.alarm){
     alarmLed.className="led led-red";
     alarmLed.textContent="!";
-    alarmText.textContent="ALARMA";
+    alarmText.textContent="ALARMA ACTIVADA";
   }else if(t>30){
     alarmLed.className="led led-yellow";
     alarmLed.textContent="⚠";
@@ -286,3 +291,4 @@ setInterval(loop,30000);
 
 </body>
 </html>
+
