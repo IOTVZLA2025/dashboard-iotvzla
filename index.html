@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -94,31 +95,28 @@
     border-bottom: none;
   }
   
-  /* POSICIONES DE LOS NÚMEROS EN ARCO SEMICIRCULAR */
-  /* REEMPLAZA LAS POSICIONES VIEJAS CON ESTAS */
+  /* POSICIONES CORREGIDAS - Números en arco semicircular */
   .scale-mark{
     position:absolute;
     font-size:11px;
     font-weight:700;
     color:rgba(255,255,255,0.9);
     text-shadow:0 1px 3px rgba(0,0,0,0.8);
-    transform:translateX(-50%);
   }
   
-  /* DISTRIBUCIÓN EN ARCO SEMICIRCULAR */
-  /* Puedes AJUSTAR estos valores left/top para posicionar exactamente */
-  /* Valores actuales: */
-  .gauge .scale-mark:nth-child(1) { left: 8%; top: 15%; }    /* -15°C (extremo izquierdo) */
-  .gauge .scale-mark:nth-child(2) { left: 18%; top: 7%; }    /* 0°C */
-  .gauge .scale-mark:nth-child(3) { left: 28%; top: 3%; }    /* 10°C */
-  .gauge .scale-mark:nth-child(4) { left: 40%; top: 1%; }    /* 20°C */
-  .gauge .scale-mark:nth-child(5) { left: 52%; top: 2%; }    /* 30°C */
-  .gauge .scale-mark:nth-child(6) { left: 64%; top: 5%; }    /* 40°C */
-  .gauge .scale-mark:nth-child(7) { left: 75%; top: 10%; }   /* 50°C */
-  .gauge .scale-mark:nth-child(8) { left: 85%; top: 18%; }   /* 60°C */
-  .gauge .scale-mark:nth-child(9) { left: 92%; top: 30%; }   /* 70°C */
-  .gauge .scale-mark:nth-child(10) { left: 96%; top: 48%; }  /* 80°C */
-  .gauge .scale-mark:nth-child(11) { left: 95%; top: 70%; }  /* 100°C (extremo derecho) */
+  /* Distribución en arco semicircular perfecto */
+  /* Ajusta estos valores si es necesario */
+  .gauge .scale-mark:nth-child(1) { left: 10%; bottom: 28%; }   /* -15°C (izquierda) */
+  .gauge .scale-mark:nth-child(2) { left: 20%; bottom: 45%; }   /* 0°C */
+  .gauge .scale-mark:nth-child(3) { left: 30%; bottom: 58%; }   /* 10°C */
+  .gauge .scale-mark:nth-child(4) { left: 42%; bottom: 66%; }   /* 20°C */
+  .gauge .scale-mark:nth-child(5) { left: 55%; bottom: 68%; }   /* 30°C */
+  .gauge .scale-mark:nth-child(6) { left: 68%; bottom: 66%; }   /* 40°C */
+  .gauge .scale-mark:nth-child(7) { left: 78%; bottom: 58%; }   /* 50°C */
+  .gauge .scale-mark:nth-child(8) { left: 86%; bottom: 45%; }   /* 60°C */
+  .gauge .scale-mark:nth-child(9) { left: 90%; bottom: 28%; }   /* 70°C */
+  .gauge .scale-mark:nth-child(10) { left: 91%; bottom: 12%; }  /* 80°C */
+  .gauge .scale-mark:nth-child(11) { left: 88%; bottom: -2%; }  /* 100°C (derecha) */
   
   .temp-display{
     position:absolute;
@@ -226,8 +224,7 @@
       <div class="gauge-wrap">
         <div class="gauge-card">
           <div class="gauge" id="gauge">
-            <!-- ESCALA EN ARCO SEMICIRCULAR (-15 a 100°C) -->
-            <!-- REEMPLAZA LOS DIVS VIEJOS CON ESTOS -->
+            <!-- Números distribuidos en arco semicircular -->
             <div class="scale-mark">-15</div>
             <div class="scale-mark">0</div>
             <div class="scale-mark">10</div>
@@ -413,3 +410,4 @@ if ('serviceWorker' in navigator){
 </script>
 </body>
 </html>
+
