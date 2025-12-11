@@ -58,18 +58,7 @@
   .header-subtitle{font-size:12px;color:var(--muted)}
 
   /* LAYOUT */
-  .container{max-width:1000px;margin:20px auto;padding:10px;}
-  .main-grid{
-    display:grid;
-    grid-template-columns:260px 1fr 260px; /* CAMBIADO: Alarma | Termómetro | Reset */
-    gap:20px;
-  }
-  @media(max-width:850px){
-    .main-grid{
-      grid-template-columns:1fr;
-      grid-template-rows:auto auto auto;
-    }
-  }
+  .container{max-width:900px;margin:20px auto;padding:10px;}
 
   /* TERMOMETRO HORIZONTAL */
   .thermo-card{
@@ -78,6 +67,7 @@
     border-radius:14px;
     border:1px solid rgba(255,255,255,0.03);
     box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    margin-bottom:20px;
   }
 
   .thermo-wrap{
@@ -85,7 +75,7 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:30px;
+    gap:25px;
   }
 
   /* TUBO */
@@ -127,22 +117,31 @@
     font-weight:800;
     color:var(--yellow);
     text-shadow:0 5px 20px rgba(255,255,0,0.3);
+    margin:10px 0;
   }
 
-  /* CARDS PEQUEÑOS (ALARMA Y RESET) */
-  .side-card{
+  /* CONTENEDOR PARA LOS DOS CUADROS DEBAJO DE LA TEMPERATURA */
+  .status-container{
+    display:flex;
+    gap:20px;
+    width:100%;
+    margin-top:10px;
+  }
+  @media(max-width:768px){
+    .status-container{flex-direction:column;}
+  }
+
+  /* CARDS PEQUEÑOS DEBAJO DE LA TEMPERATURA */
+  .status-card{
+    flex:1;
     background:rgba(255,255,255,0.03);
     border-radius:12px;
     padding:18px;
     text-align:center;
     border:1px solid rgba(255,255,255,0.05);
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    height:100%;
   }
-  .side-title{font-size:15px;font-weight:700;margin-bottom:10px}
-  .side-text{font-size:13px;color:var(--muted);margin-bottom:12px}
+  .status-title{font-size:15px;font-weight:700;margin-bottom:10px}
+  .status-text{font-size:13px;color:var(--muted);margin-bottom:12px}
   .led{
     width:65px;
     height:65px;
@@ -185,44 +184,46 @@
 </header>
 
 <div class="container">
-  <div class="main-grid">
 
-    <!-- ALARMA A LA IZQUIERDA -->
-    <div class="side-card">
-      <div class="side-title">Estado alarma</div>
-      <div id="alarmText" class="side-text">Normal</div>
-      <div id="ledAlarm" class="led led-green">✓</div>
-    </div>
+  <!-- TERMOMETRO HORIZONTAL COMPLETO -->
+  <div class="thermo-card">
+    <div class="thermo-wrap">
 
-    <!-- TERMOMETRO HORIZONTAL (EN EL CENTRO) -->
-    <div class="thermo-card">
-      <div class="thermo-wrap">
+      <!-- Barra del termómetro -->
+      <div class="thermo-bar">
+        <div id="mercury" class="thermo-mercury"></div>
+      </div>
 
-        <!-- Barra -->
-        <div class="thermo-bar">
-          <div id="mercury" class="thermo-mercury"></div>
+      <!-- Numeración (sin °C) -->
+      <div class="thermo-scale">
+        <span>-15</span><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span><span>100</span>
+      </div>
+
+      <!-- Display de temperatura (4 dígitos) -->
+      <div class="temp-digital">
+        <span id="tempValue">0.0</span>°C
+      </div>
+
+      <!-- CONTENEDOR PARA LOS DOS CUADROS DEBAJO DE LA TEMPERATURA -->
+      <div class="status-container">
+        
+        <!-- ALARMA - LADO IZQUIERDO -->
+        <div class="status-card">
+          <div class="status-title">Estado alarma</div>
+          <div id="alarmText" class="status-text">Normal</div>
+          <div id="ledAlarm" class="led led-green">✓</div>
         </div>
 
-        <!-- Numeración (sin °C) -->
-        <div class="thermo-scale">
-          <span>-15</span><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span><span>100</span>
-        </div>
-
-        <!-- Display -->
-        <div class="temp-digital">
-          <span id="tempValue">0.0</span>°C
+        <!-- RESET - LADO DERECHO -->
+        <div class="status-card">
+          <div class="status-title">Reset</div>
+          <div id="resetText" class="status-text">No activo</div>
+          <div id="ledReset" class="led led-off">-</div>
         </div>
 
       </div>
-    </div>
 
-    <!-- RESET A LA DERECHA -->
-    <div class="side-card">
-      <div class="side-title">Reset</div>
-      <div id="resetText" class="side-text">No activo</div>
-      <div id="ledReset" class="led led-off">-</div>
     </div>
-
   </div>
 
   <!-- COPYRIGHT PROFESIONAL ABAJO -->
