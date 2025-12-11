@@ -1,5 +1,4 @@
 
-
 <!doctype html>
 <html lang="es">
 <head>
@@ -94,27 +93,33 @@
     border: 6px solid rgba(255,255,255,0.15);
     border-bottom: none;
   }
-  /* Escala semicírculo perfectamente posicionada */
+  
+  /* POSICIONES DE LOS NÚMEROS EN ARCO SEMICIRCULAR */
+  /* REEMPLAZA LAS POSICIONES VIEJAS CON ESTAS */
   .scale-mark{
     position:absolute;
     font-size:11px;
     font-weight:700;
     color:rgba(255,255,255,0.9);
     text-shadow:0 1px 3px rgba(0,0,0,0.8);
-    left:50%;
     transform:translateX(-50%);
   }
-  .scale-mark.m0{top:8px}
-  .scale-mark.m10{top:15px}
-  .scale-mark.m20{top:25px}
-  .scale-mark.m30{top:37px}
-  .scale-mark.m40{top:52px}
-  .scale-mark.m50{left:50%;top:68px}
-  .scale-mark.m60{left:52%;top:82px}
-  .scale-mark.m70{left:58%;top:92px}
-  .scale-mark.m80{left:68%;top:98px}
-  .scale-mark.m90{left:82%;top:99px}
-  .scale-mark.m100{top:8px;right:12px;left:auto}
+  
+  /* DISTRIBUCIÓN EN ARCO SEMICIRCULAR */
+  /* Puedes AJUSTAR estos valores left/top para posicionar exactamente */
+  /* Valores actuales: */
+  .gauge .scale-mark:nth-child(1) { left: 8%; top: 15%; }    /* -15°C (extremo izquierdo) */
+  .gauge .scale-mark:nth-child(2) { left: 18%; top: 7%; }    /* 0°C */
+  .gauge .scale-mark:nth-child(3) { left: 28%; top: 3%; }    /* 10°C */
+  .gauge .scale-mark:nth-child(4) { left: 40%; top: 1%; }    /* 20°C */
+  .gauge .scale-mark:nth-child(5) { left: 52%; top: 2%; }    /* 30°C */
+  .gauge .scale-mark:nth-child(6) { left: 64%; top: 5%; }    /* 40°C */
+  .gauge .scale-mark:nth-child(7) { left: 75%; top: 10%; }   /* 50°C */
+  .gauge .scale-mark:nth-child(8) { left: 85%; top: 18%; }   /* 60°C */
+  .gauge .scale-mark:nth-child(9) { left: 92%; top: 30%; }   /* 70°C */
+  .gauge .scale-mark:nth-child(10) { left: 96%; top: 48%; }  /* 80°C */
+  .gauge .scale-mark:nth-child(11) { left: 95%; top: 70%; }  /* 100°C (extremo derecho) */
+  
   .temp-display{
     position:absolute;
     bottom:-35px;
@@ -133,20 +138,21 @@
     font-size:18px;
     color:var(--muted);
     margin-top:2px;
+  }
   .gauge-needle{
-  --rot:0deg;
-  position:absolute;
-  bottom:-5px;              /* antes estaba en 8px */
-  left:50%;
-  width:4px;
-  height:80px;              /* puedes probar 70–90px */
-  background:linear-gradient(to top,#fff,#ccecff);
-  border-radius:2px;
-  transform-origin:50% 100%;
-  transform:translateX(-50%) rotate(var(--rot));
-  box-shadow:0 2px 8px rgba(0,0,0,0.6);
-  z-index:3;
-}
+    --rot:0deg;
+    position:absolute;
+    bottom:-5px;
+    left:50%;
+    width:4px;
+    height:80px;
+    background:linear-gradient(to top,#fff,#ccecff);
+    border-radius:2px;
+    transform-origin:50% 100%;
+    transform:translateX(-50%) rotate(var(--rot));
+    box-shadow:0 2px 8px rgba(0,0,0,0.6);
+    z-index:3;
+  }
   .gauge-center-dot{
     position:absolute;
     width:18px;
@@ -220,18 +226,19 @@
       <div class="gauge-wrap">
         <div class="gauge-card">
           <div class="gauge" id="gauge">
-            <!-- Escala semicírculo -15 a 100 -->
-            <div class="scale-mark m0">-15</div>
-            <div class="scale-mark m10">0</div>
-            <div class="scale-mark m20">10</div>
-            <div class="scale-mark m30">20</div>
-            <div class="scale-mark m40">30</div>
-            <div class="scale-mark m50">40</div>
-            <div class="scale-mark m60">50</div>
-            <div class="scale-mark m70">60</div>
-            <div class="scale-mark m80">70</div>
-            <div class="scale-mark m90">80</div>
-            <div class="scale-mark m100">100</div>
+            <!-- ESCALA EN ARCO SEMICIRCULAR (-15 a 100°C) -->
+            <!-- REEMPLAZA LOS DIVS VIEJOS CON ESTOS -->
+            <div class="scale-mark">-15</div>
+            <div class="scale-mark">0</div>
+            <div class="scale-mark">10</div>
+            <div class="scale-mark">20</div>
+            <div class="scale-mark">30</div>
+            <div class="scale-mark">40</div>
+            <div class="scale-mark">50</div>
+            <div class="scale-mark">60</div>
+            <div class="scale-mark">70</div>
+            <div class="scale-mark">80</div>
+            <div class="scale-mark">100</div>
             
             <div class="gauge-needle" id="needle" style="--rot:0deg"></div>
             <div class="temp-display">
@@ -406,8 +413,3 @@ if ('serviceWorker' in navigator){
 </script>
 </body>
 </html>
-
-
-
-
-
