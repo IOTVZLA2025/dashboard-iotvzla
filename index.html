@@ -62,13 +62,13 @@
     margin:0 auto;
   }
   
-  /* LOGO OPTIMIZADO PARA 255×164px - SE VE COMPLETO */
+ /* LOGO OPTIMIZADO PARA 120×77px - TAMAÑO PERFECTO */
 .header-logo{
-  width:80px;  /* Más ancho para logo horizontal */
-  height:45px; /* Mantiene altura */
+  width:120px;   /* Ancho EXACTO de tu logo */
+  height:77px;   /* Alto EXACTO de tu logo */
   border-radius:10px;
   background:rgba(255,255,255,0.05);
-  padding:2px;
+  padding:3px;
   border:1px solid var(--accent);
   display:flex;
   align-items:center;
@@ -77,11 +77,9 @@
 }
 
 .header-logo img{
-  max-width:100%;
-  max-height:100%;
-  width:auto;
-  height:auto;
-  object-fit:contain;
+  width:100%;    /* Ocupa todo el espacio */
+  height:100%;   /* Ocupa todo el espacio */
+  object-fit:contain; /* Mantiene proporción sin deformar */
 }
 
   .header-text h1{
@@ -587,4 +585,5 @@ setInterval(checkForUpdates, CONSULTA_INTERVAL_MS);
 
 </body>
 </html>
+
 
