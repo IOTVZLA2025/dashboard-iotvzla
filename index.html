@@ -1,5 +1,4 @@
 
-
 <!doctype html>
 <html lang="es">
 <head>
@@ -28,11 +27,14 @@
     font-family:Arial,Helvetica,sans-serif;
     background:var(--bg);
     color:white;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
   }
 
   /* HEADER */
   .header{
-    padding:14px;
+    padding:12px;
     background:var(--card);
     border-bottom:1px solid rgba(255,255,255,0.05);
   }
@@ -44,30 +46,35 @@
     margin:0 auto;
   }
   .header-logo{
-    width:42px;
-    height:42px;
+    width:40px;
+    height:40px;
     border-radius:8px;
     background:rgba(255,255,255,0.05);
     padding:4px;
   }
   .header-text h1{
-    font-size:18px;
+    font-size:16px;
     margin:0;
   }
-  .header-company{color:var(--accent);font-size:14px;font-weight:600;}
-  .header-subtitle{font-size:12px;color:var(--muted)}
+  .header-company{color:var(--accent);font-size:13px;font-weight:600;}
+  .header-subtitle{font-size:11px;color:var(--muted)}
 
-  /* LAYOUT */
-  .container{max-width:900px;margin:20px auto;padding:10px;}
+  /* CONTENIDO PRINCIPAL - SIN MARGEN ARRIBA */
+  .container{
+    max-width:900px;
+    margin:0 auto;
+    padding:10px;
+    flex:1;
+  }
 
   /* TERMOMETRO HORIZONTAL */
   .thermo-card{
     background:var(--card);
-    padding:25px;
+    padding:20px 25px;
     border-radius:14px;
     border:1px solid rgba(255,255,255,0.03);
     box-shadow:0 10px 30px rgba(0,0,0,0.4);
-    margin-bottom:20px;
+    margin-top:5px; /* MUY PEQUEÑO MARGEN ARRIBA */
   }
 
   .thermo-wrap{
@@ -75,18 +82,19 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:25px;
+    gap:20px;
   }
 
-  /* TUBO */
+  /* TUBO DEL TERMOMETRO - MÁS CERCA DEL HEADER */
   .thermo-bar{
     position:relative;
     width:100%;
-    height:40px;
+    height:35px;
     background:#0a1525;
-    border-radius:20px;
-    border:4px solid var(--yellow);
+    border-radius:18px;
+    border:3px solid var(--yellow);
     overflow:hidden;
+    margin-top:5px;
   }
 
   /* MERCURIO */
@@ -105,73 +113,95 @@
     width:100%;
     display:flex;
     justify-content:space-between;
-    font-size:14px;
+    font-size:12px;
     font-weight:600;
     color:white;
-    margin-top:5px;
+    margin-top:3px;
   }
 
-  /* TEMPERATURA DIGITAL */
+  /* TEMPERATURA DIGITAL - GRANDE */
   .temp-digital{
-    font-size:56px;
+    font-size:52px;
     font-weight:800;
     color:var(--yellow);
     text-shadow:0 5px 20px rgba(255,255,0,0.3);
-    margin:10px 0;
+    margin:5px 0 15px 0;
+    text-align:center;
   }
 
-  /* CONTENEDOR PARA LOS DOS CUADROS DEBAJO DE LA TEMPERATURA */
-  .status-container{
+  /* CONTENEDOR PARA LOS BOMBILLOS/LEDS */
+  .leds-container{
     display:flex;
-    gap:15px;
+    justify-content:center;
+    gap:40px;
     width:100%;
     margin-top:10px;
-    justify-content:center;
   }
 
-  /* CARDS PEQUEÑOS DEBAJO DE LA TEMPERATURA - MÁS PEQUEÑOS */
-  .status-card{
-    width:180px; /* Más pequeño */
-    background:rgba(255,255,255,0.03);
-    border-radius:10px;
-    padding:15px; /* Menos padding */
-    text-align:center;
-    border:1px solid rgba(255,255,255,0.05);
+  /* BOMBILLOS/LEDS CIRCULARES PEQUEÑOS */
+  .led-bulb{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100px; /* MUCHO MÁS PEQUEÑO */
   }
-  .status-title{
-    font-size:14px; /* Más pequeño */
-    font-weight:700;
-    margin-bottom:8px;
-  }
-  .status-text{
-    font-size:12px; /* Más pequeño */
-    color:var(--muted);
-    margin-bottom:10px;
-    min-height:18px;
-  }
-  .led{
-    width:50px; /* Más pequeño */
-    height:50px; /* Más pequeño */
-    border-radius:10px; /* Más pequeño */
+
+  .bulb-circle{
+    width:50px;
+    height:50px;
+    border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:20px; /* Más pequeño */
+    font-size:18px;
     font-weight:800;
-    margin:0 auto;
+    margin-bottom:8px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.5);
+    border:2px solid rgba(255,255,255,0.1);
   }
-  .led-green{background:var(--green);color:#021}
-  .led-yellow{background:var(--yellow);color:#2b1a00}
-  .led-red{background:var(--red);color:#250005}
-  .led-off{background:rgba(255,255,255,0.05);color:var(--muted)}
+
+  .bulb-label{
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:3px;
+    color:white;
+  }
+
+  .bulb-status{
+    font-size:11px;
+    color:var(--muted);
+  }
+
+  /* COLORES DE LOS BOMBILLOS */
+  .bulb-green{
+    background:radial-gradient(circle at 30% 30%, var(--green), #007a2b);
+    color:#021;
+  }
+
+  .bulb-yellow{
+    background:radial-gradient(circle at 30% 30%, var(--yellow), #b37a00);
+    color:#2b1a00;
+  }
+
+  .bulb-red{
+    background:radial-gradient(circle at 30% 30%, var(--red), #a1002b);
+    color:#250005;
+  }
+
+  .bulb-off{
+    background:radial-gradient(circle at 30% 30%, #333, #111);
+    color:var(--muted);
+  }
 
   /* FOOTER COPYRIGHT */
   .footer-copy{
     text-align:center;
-    font-size:14px;
+    font-size:13px;
     color:var(--blue);
-    margin-top:25px;
+    margin-top:20px;
+    padding:15px 0;
     font-weight:700;
+    border-top:1px solid rgba(255,255,255,0.05);
   }
 
   /* RESPONSIVE PARA CELULAR */
@@ -181,63 +211,90 @@
     }
     
     .thermo-card {
-      padding: 20px;
+      padding: 15px;
     }
     
     .temp-digital {
-      font-size: 48px;
-    }
-    
-    .status-container {
-      flex-direction: row; /* Siempre en fila */
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    
-    .status-card {
-      width: 48%; /* Ocupa casi la mitad */
-      min-width: 140px;
-      padding: 12px;
-    }
-    
-    .thermo-scale {
-      font-size: 12px;
+      font-size: 44px;
     }
     
     .thermo-bar {
-      height: 35px;
-    }
-  }
-  
-  /* Para pantallas muy pequeñas */
-  @media (max-width: 480px) {
-    .temp-digital {
-      font-size: 40px;
-    }
-    
-    .status-card {
-      width: 48%;
-      padding: 10px;
-    }
-    
-    .status-title {
-      font-size: 13px;
-    }
-    
-    .led {
-      width: 45px;
-      height: 45px;
-      font-size: 18px;
+      height: 30px;
     }
     
     .thermo-scale {
       font-size: 10px;
     }
     
+    .leds-container {
+      gap: 20px;
+    }
+    
+    .led-bulb {
+      width: 85px;
+    }
+    
+    .bulb-circle {
+      width: 45px;
+      height: 45px;
+      font-size: 16px;
+    }
+    
+    .bulb-label {
+      font-size: 12px;
+    }
+    
+    .bulb-status {
+      font-size: 10px;
+    }
+    
+    .header-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 8px;
+    }
+    
+    .header-logo {
+      width: 36px;
+      height: 36px;
+    }
+    
+    .header-text h1 {
+      font-size: 15px;
+    }
+  }
+
+  /* PARA PANTALLAS MUY PEQUEÑAS */
+  @media (max-width: 480px) {
+    .temp-digital {
+      font-size: 38px;
+    }
+    
     .thermo-bar {
-      height: 30px;
-      border-width: 3px;
+      height: 25px;
+      border-width: 2px;
+    }
+    
+    .thermo-scale {
+      font-size: 9px;
+    }
+    
+    .leds-container {
+      gap: 15px;
+    }
+    
+    .led-bulb {
+      width: 75px;
+    }
+    
+    .bulb-circle {
+      width: 40px;
+      height: 40px;
+      font-size: 15px;
+    }
+    
+    .bulb-label {
+      font-size: 11px;
     }
   }
 
@@ -263,7 +320,7 @@
   <div class="thermo-card">
     <div class="thermo-wrap">
 
-      <!-- Barra del termómetro -->
+      <!-- Barra del termómetro - MUY CERCA DEL HEADER -->
       <div class="thermo-bar">
         <div id="mercury" class="thermo-mercury"></div>
       </div>
@@ -278,21 +335,21 @@
         <span id="tempValue">0.0</span>°C
       </div>
 
-      <!-- CONTENEDOR PARA LOS DOS CUADROS DEBAJO DE LA TEMPERATURA -->
-      <div class="status-container">
+      <!-- CONTENEDOR PARA LOS DOS BOMBILLOS/LEDS -->
+      <div class="leds-container">
         
-        <!-- ALARMA - LADO IZQUIERDO -->
-        <div class="status-card">
-          <div class="status-title">Estado alarma</div>
-          <div id="alarmText" class="status-text">Normal</div>
-          <div id="ledAlarm" class="led led-green">✓</div>
+        <!-- ALARMA - BOMBILLO IZQUIERDO -->
+        <div class="led-bulb">
+          <div id="bulbAlarm" class="bulb-circle bulb-green">✓</div>
+          <div class="bulb-label">ALARMA</div>
+          <div id="alarmText" class="bulb-status">Normal</div>
         </div>
 
-        <!-- RESET - LADO DERECHO -->
-        <div class="status-card">
-          <div class="status-title">Reset</div>
-          <div id="resetText" class="status-text">No activo</div>
-          <div id="ledReset" class="led led-off">-</div>
+        <!-- RESET - BOMBILLO DERECHO -->
+        <div class="led-bulb">
+          <div id="bulbReset" class="bulb-circle bulb-off">-</div>
+          <div class="bulb-label">RESET</div>
+          <div id="resetText" class="bulb-status">No activo</div>
         </div>
 
       </div>
@@ -300,7 +357,7 @@
     </div>
   </div>
 
-  <!-- COPYRIGHT PROFESIONAL ABAJO -->
+  <!-- COPYRIGHT ABAJO -->
   <div class="footer-copy">
     &copy; MILLARES INGENIERIA SPA CHILE
   </div>
@@ -332,32 +389,32 @@ function updateThermo(t){
 }
 
 function updateStatus(t){
-  const alarmLed=document.getElementById("ledAlarm");
+  const alarmBulb=document.getElementById("bulbAlarm");
   const alarmText=document.getElementById("alarmText");
-  const resetLed=document.getElementById("ledReset");
+  const resetBulb=document.getElementById("bulbReset");
   const resetText=document.getElementById("resetText");
 
   if(t>CONFIG.alarm){
-    alarmLed.className="led led-red";
-    alarmLed.textContent="!";
-    alarmText.textContent="ALARMA ACTIVADA";
+    alarmBulb.className="bulb-circle bulb-red";
+    alarmBulb.textContent="!";
+    alarmText.textContent="ACTIVADA";
   }else if(t>30){
-    alarmLed.className="led led-yellow";
-    alarmLed.textContent="⚠";
+    alarmBulb.className="bulb-circle bulb-yellow";
+    alarmBulb.textContent="⚠";
     alarmText.textContent="ADVERTENCIA";
   }else{
-    alarmLed.className="led led-green";
-    alarmLed.textContent="✓";
+    alarmBulb.className="bulb-circle bulb-green";
+    alarmBulb.textContent="✓";
     alarmText.textContent="Normal";
   }
 
   if(t>CONFIG.reset){
-    resetLed.className="led led-red";
-    resetLed.textContent="!";
-    resetText.textContent="RESET RECOMENDADO";
+    resetBulb.className="bulb-circle bulb-red";
+    resetBulb.textContent="!";
+    resetText.textContent="RECOMENDADO";
   }else{
-    resetLed.className="led led-off";
-    resetLed.textContent="-";
+    resetBulb.className="bulb-circle bulb-off";
+    resetBulb.textContent="-";
     resetText.textContent="No activo";
   }
 }
