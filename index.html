@@ -562,17 +562,23 @@ async function checkForUpdates() {
   try {
     const data = await getThingSpeakData();
     
-    // Guardar temperatura y timestamp en localStorage
-    if (data.timestamp) {
+    // SOLO guardar temperatura si es válida (entre -15 y 100, y no -999)
+    const temperaturaValida = data.temperature >= -15 && data.temperature <= 100;
+    
+    if (data.timestamp && temperaturaValida) {
       localStorage.setItem('lastThingSpeakTime', data.timestamp);
       localStorage.setItem('lastThingSpeakTemp', data.temperature.toString());
     }
     
-    // Usar datos guardados si no hay nuevos
-    const storedTime = localStorage.getItem('lastThingSpeakTime') || data.timestamp;
-    const storedTemp = parseFloat(localStorage.getItem('lastThingSpeakTemp')) || data.temperature;
+    // Usar la última temperatura válida guardada, si no hay, usar 0
+    let storedTemp = parseFloat(localStorage.getItem('lastThingSpeakTemp'));
+    if (isNaN(storedTemp)) {
+      storedTemp = 0;
+    }
     
-    // Actualizar temperatura y hora
+    const storedTime = localStorage.getItem('lastThingSpeakTime') || data.timestamp;
+    
+    // Actualizar temperatura y hora (SIEMPRE con la última temperatura válida)
     updateDisplay(storedTemp, storedTime);
     
     // Procesar estados ACTUALES de alarma y reset
