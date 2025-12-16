@@ -492,7 +492,7 @@ function updateDisplay(temp, timestamp) {
   document.getElementById("mercury").style.width = (pct * 100) + "%";
   document.getElementById("tempValue").textContent = temp.toFixed(1);
   
-  // Actualizar hora
+  // Actualizar hora SIEMPRE con el timestamp actual
   const caracasDate = convertToCaracasTime(timestamp);
   const timeElement = document.getElementById("updateTime");
   
@@ -561,22 +561,25 @@ async function checkForUpdates() {
   try {
     const data = await getThingSpeakData();
     
+    // Guardar timestamp SIEMPRE (válido o no)
+    if (data.timestamp) {
+      localStorage.setItem('lastThingSpeakTime', data.timestamp);
+    }
+    
     // Verificar si la temperatura es válida (excluye 0°C si no es válido en tu ambiente)
     const tempValida = data.temperature !== 0 && data.temperature >= -15 && data.temperature <= 100;
     
     if (tempValida) {
       lastValidTemp = data.temperature;
-      if (data.timestamp) {
-        localStorage.setItem('lastThingSpeakTime', data.timestamp);
-        localStorage.setItem('lastThingSpeakTemp', data.temperature.toString());
-      }
+      localStorage.setItem('lastThingSpeakTemp', data.temperature.toString());
     }
     
-    // Usar la última temperatura válida
+    // Usar la última temperatura válida y el último timestamp disponible
     const storedTime = localStorage.getItem('lastThingSpeakTime') || data.timestamp;
+    const storedTemp = parseFloat(localStorage.getItem('lastThingSpeakTemp')) || lastValidTemp;
     
-    // Actualizar temperatura y hora SIEMPRE con la última válida
-    updateDisplay(lastValidTemp, storedTime);
+    // Actualizar temperatura y hora con los datos más recientes
+    updateDisplay(storedTemp, storedTime);
     
     // Procesar estados ACTUALES de alarma y reset
     processAlarmReset(data.alarmState, data.resetState, data.entryId);
