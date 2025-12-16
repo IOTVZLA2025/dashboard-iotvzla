@@ -459,10 +459,11 @@ function getTimeAgo(caracasDate) {
   return `Hace ${Math.floor(diffMins/1440)} días`;
 }
 
-// Función para obtener datos de ThingSpeak
+// Función para obtener datos de ThingSpeak (EVITAR CACHE)
 async function getThingSpeakData() {
   try {
-    const url = `https://api.thingspeak.com/channels/${CONFIG.channelId}/feeds/last.json?api_key=${CONFIG.apiKey}`;
+    const cacheBuster = new Date().getTime();
+    const url = `https://api.thingspeak.com/channels/${CONFIG.channelId}/feeds/last.json?api_key=${CONFIG.apiKey}&_=${cacheBuster}`;
     const response = await fetch(url);
     const data = await response.json();
     
@@ -574,8 +575,8 @@ async function checkForUpdates() {
       localStorage.setItem('lastThingSpeakTemp', data.temperature.toString());
     }
     
-    // Usar la última temperatura válida y el último timestamp disponible
-    const storedTime = localStorage.getItem('lastThingSpeakTime') || data.timestamp;
+    // Usar la última temperatura válida y el timestamp más reciente
+    const storedTime = localStorage.getItem('lastThingSpeakTime');
     const storedTemp = parseFloat(localStorage.getItem('lastThingSpeakTemp')) || lastValidTemp;
     
     // Actualizar temperatura y hora con los datos más recientes
