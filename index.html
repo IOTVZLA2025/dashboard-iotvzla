@@ -274,7 +274,7 @@ font-size: 48px;
 }
 
 .update-time {
-font-size: 16px;   /* ← SOLO AÑADÍ ESTA LÍNEA COMPLETA */
+font-size: 14px;
 }
 
 .thermo-bar {
@@ -314,7 +314,7 @@ font-size: 42px;
 }
 
 .update-time {
-font-size: 15px;   /* ← SOLO AÑADÍ ESTA LÍNEA COMPLETA */
+font-size: 13px;
 }
 
 .thermo-bar {
@@ -419,6 +419,8 @@ let resetActive = false;
 let resetTimeout = null;
 let resetBlinkInterval = null;
 let lastValidTemp = 0;
+let lastUpdateTime = null;      // ← NUEVA: Para controlar última actualización
+let connectionWatchdog = null;  // ← NUEVA: Para controlar desconexión
 
 // Función para convertir hora UTC a Caracas (UTC-4) - REPARADA
 function convertToCaracasTime(thingSpeakTime) {
@@ -471,6 +473,9 @@ async function getThingSpeakData() {
     const response = await fetch(url);
     const data = await response.json();
     
+    // Actualizar el tiempo de última conexión exitosa ← NUEVA LÍNEA
+    lastUpdateTime = new Date();
+    
     return {
       temperature: parseFloat(data.field1) || 0,
       alarmState: parseInt(data.field2) || 0,
@@ -486,6 +491,48 @@ async function getThingSpeakData() {
       timestamp: null, 
       entryId: 0
     };
+  }
+}
+
+// Función para verificar conexión - DETENER PARPADEO INFINITO ← NUEVA FUNCIÓN
+function checkConnectionStatus() {
+  if (!lastUpdateTime) return;
+  
+  const now = new Date();
+  const secondsSinceLastUpdate = (now - lastUpdateTime) / 1000;
+  
+  // Si no hay actualización en 90 segundos (1.5 minutos)
+  if (secondsSinceLastUpdate > 90) {
+    const alarmBulb = document.getElementById("bulbAlarm");
+    const alarmText = document.getElementById("alarmText");
+    const resetBulb = document.getElementById("bulbReset");
+    const resetText = document.getElementById("resetText");
+    
+    // 1. DETENER PARPADEO DEL RESET SI ESTÁ ACTIVO
+    if (resetBlinkInterval) {
+      clearInterval(resetBlinkInterval);
+      resetBlinkInterval = null;
+    }
+    if (resetTimeout) {
+      clearTimeout(resetTimeout);
+      resetTimeout = null;
+    }
+    
+    // 2. APAGAR LEDs y mostrar estado DESCONECTADO
+    resetBulb.className = "bulb-circle bulb-off";
+    resetBulb.textContent = "-";
+    resetText.textContent = "Sin conexión";
+    
+    alarmBulb.className = "bulb-circle bulb-off";
+    alarmBulb.textContent = "?";
+    alarmText.textContent = "Sin conexión";
+    
+    // 3. RESETEAR VARIABLES
+    resetActive = false;
+    
+    // 4. ACTUALIZAR TEXTO DE ÚLTIMA MEDICIÓN
+    document.getElementById("updateTime").textContent = 
+      "Última medición: Sin conexión - Esperando datos...";
   }
 }
 
@@ -542,12 +589,13 @@ function processAlarmReset(alarmState, resetState, entryId) {
         blinkState = !blinkState;
     }
     
-    // Iniciar parpadeo - AJUSTA ESTE VALOR (velocidad)
-    // 500ms = medio segundo entre cambios (250ms encendido, 250ms apagado)
+    // Iniciar parpadeo
     const blinkInterval = setInterval(blinkResetBulb, 500);
     
-    // Detener parpadeo después de X tiempo - AJUSTA ESTE VALOR (duración total)
-    // 3000ms = 3 segundos total (6 cambios)
+    // Guardar referencia para poder detenerlo
+    resetBlinkInterval = blinkInterval;
+    
+    // Detener parpadeo después de 3 segundos
     if (resetTimeout) clearTimeout(resetTimeout);
     resetTimeout = setTimeout(() => {
         clearInterval(blinkInterval);
@@ -555,6 +603,7 @@ function processAlarmReset(alarmState, resetState, entryId) {
         resetBulb.textContent = "-";
         resetText.textContent = "No activo";
         resetActive = false;
+        resetBlinkInterval = null;
     }, 3000);
     
     return;
@@ -622,6 +671,12 @@ window.addEventListener('load', function() {
     updateDisplay(lastValidTemp, storedTime);
   }
   
+  // Inicializar el tiempo de última actualización ← NUEVA
+  lastUpdateTime = new Date();
+  
+  // Iniciar watchdog para verificar conexión cada 10 segundos ← NUEVA
+  connectionWatchdog = setInterval(checkConnectionStatus, 10000);
+  
   // Hacer primera consulta inmediata
   checkForUpdates();
 });
@@ -633,4 +688,3 @@ setInterval(checkForUpdates, CONSULTA_INTERVAL_MS);
 
 </body>
 </html>
-
