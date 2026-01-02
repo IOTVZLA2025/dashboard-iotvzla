@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -71,7 +72,7 @@ padding:2px;
 border:1px solid var(--accent);
 display:flex;
 align-items:center;
-justify-content:center;
+justifycontent:center;
 overflow:hidden;
 }
 
@@ -419,18 +420,15 @@ let resetActive = false;
 let resetTimeout = null;
 let resetBlinkInterval = null;
 let lastValidTemp = 0;
-let lastUpdateTime = null;      // ← NUEVA: Para controlar última actualización
-let connectionWatchdog = null;  // ← NUEVA: Para controlar desconexión
+let lastUpdateTime = null;
+let connectionWatchdog = null;
+let lastResetEntryId = 0; // ← NUEVA: Guarda el último ID de reset procesado
 
 // Función para convertir hora UTC a Caracas (UTC-4) - REPARADA
 function convertToCaracasTime(thingSpeakTime) {
   if (!thingSpeakTime) return null;
   try {
-    // Crear fecha en UTC (ThingSpeak devuelve UTC)
     const utcDate = new Date(thingSpeakTime);
-    
-    // Caracas es UTC-4, pero el navegador ya ajusta automáticamente
-    // Si el navegador está en zona Caracas, mostrará hora correcta
     return utcDate;
   } catch (e) {
     console.error("Error convirtiendo hora:", e);
@@ -473,7 +471,7 @@ async function getThingSpeakData() {
     const response = await fetch(url);
     const data = await response.json();
     
-    // Actualizar el tiempo de última conexión exitosa ← NUEVA LÍNEA
+    // Actualizar el tiempo de última conexión exitosa
     lastUpdateTime = new Date();
     
     return {
@@ -484,6 +482,7 @@ async function getThingSpeakData() {
       entryId: parseInt(data.entry_id) || 0
     };
   } catch (e) {
+    console.log("Error obteniendo datos de ThingSpeak:", e);
     return { 
       temperature: 0, 
       alarmState: 0, 
@@ -494,15 +493,15 @@ async function getThingSpeakData() {
   }
 }
 
-// Función para verificar conexión - DETENER PARPADEO INFINITO ← NUEVA FUNCIÓN
+// Función para verificar conexión - DETENER PARPADEO INFINITO
 function checkConnectionStatus() {
   if (!lastUpdateTime) return;
   
   const now = new Date();
   const secondsSinceLastUpdate = (now - lastUpdateTime) / 1000;
   
-  // Si no hay actualización en 90 segundos (1.5 minutos)
-  if (secondsSinceLastUpdate > 90) {
+  // Si no hay actualización en 30 segundos (más corto para reset)
+  if (secondsSinceLastUpdate > 30) {
     const alarmBulb = document.getElementById("bulbAlarm");
     const alarmText = document.getElementById("alarmText");
     const resetBulb = document.getElementById("bulbReset");
@@ -529,6 +528,7 @@ function checkConnectionStatus() {
     
     // 3. RESETEAR VARIABLES
     resetActive = false;
+    lastResetEntryId = 0; // ← Resetear también esta variable
     
     // 4. ACTUALIZAR TEXTO DE ÚLTIMA MEDICIÓN
     document.getElementById("updateTime").textContent = 
@@ -538,13 +538,11 @@ function checkConnectionStatus() {
 
 // Función para actualizar la pantalla
 function updateDisplay(temp, timestamp) {
-  // Actualizar termómetro
   const min = -15, max = 100;
   const pct = Math.max(0, Math.min(1, (temp - min) / (max - min)));
   document.getElementById("mercury").style.width = (pct * 100) + "%";
   document.getElementById("tempValue").textContent = temp.toFixed(2);
   
-  // Actualizar hora SIEMPRE con el timestamp actual
   const caracasDate = convertToCaracasTime(timestamp);
   const timeElement = document.getElementById("updateTime");
   
@@ -564,8 +562,17 @@ function processAlarmReset(alarmState, resetState, entryId) {
   const resetBulb = document.getElementById("bulbReset");
   const resetText = document.getElementById("resetText");
   
+  // EVITAR REPROCESAR EL MISMO RESET MÚLTIPLES VECES ← NUEVO
+  if (resetState === 1 && entryId === lastResetEntryId) {
+    // Este reset ya fue procesado, no hacer nada
+    return;
+  }
+  
   // RESET TIENE PRIORIDAD TOTAL - Solo activar si no está ya activo
   if (resetState === 1 && !resetActive) {
+    // Guardar que este entryId ya fue procesado
+    lastResetEntryId = entryId;
+    
     resetActive = true;
     
     // 1. Desactivar alarma (VERDE)
@@ -591,8 +598,6 @@ function processAlarmReset(alarmState, resetState, entryId) {
     
     // Iniciar parpadeo
     const blinkInterval = setInterval(blinkResetBulb, 500);
-    
-    // Guardar referencia para poder detenerlo
     resetBlinkInterval = blinkInterval;
     
     // Detener parpadeo después de 3 segundos
@@ -671,10 +676,10 @@ window.addEventListener('load', function() {
     updateDisplay(lastValidTemp, storedTime);
   }
   
-  // Inicializar el tiempo de última actualización ← NUEVA
+  // Inicializar el tiempo de última actualización
   lastUpdateTime = new Date();
   
-  // Iniciar watchdog para verificar conexión cada 10 segundos ← NUEVA
+  // Iniciar watchdog para verificar conexión cada 10 segundos
   connectionWatchdog = setInterval(checkConnectionStatus, 10000);
   
   // Hacer primera consulta inmediata
